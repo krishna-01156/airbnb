@@ -1,4 +1,6 @@
 <% layout("/layouts/boilerplate") -%>
+<% let searchTerm = typeof location !== "undefined" ? location : ""; %>
+
     <style>
         #filters{
             display: flex;
@@ -88,6 +90,12 @@
         </div>
         </div>
     </div>
+    <% if (allListings.length === 0) { %>
+    <div class="container mt-4">
+        <h4>No listings found for "<%= searchTerm %>"</h4>
+    </div>
+    <% } else { %>
+
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
         <% for(let listing of allListings){ %>
             <a href="/listings/<%=listing._id%>" class="listing-link">
@@ -107,7 +115,8 @@
             </a>
             <% } %>
     </div>
-
+    <% } %>
+    
 <script>
     let taxswitch=document.getElementById("switchCheckDefault");
     taxswitch.addEventListener("click",()=>{
