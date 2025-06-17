@@ -35,13 +35,13 @@
             <div class="navbar-nav ms-auto">
                 <form class="d-flex" role="search" action="/listings" method="GET">
                 <input class="form-control me-2 search-inp" type="search" placeholder="Search by location or country"
-                name="location" aria-label="Search" />
+                name="location"  />
                 <button class="btn search-btn" type="submit">
                 <i class="fa-solid fa-magnifying-glass"></i> Search
-                </button>
+                </button> 
                 </form>
             </div>
-            
+
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="/listings/new">Airbnb your home</a>
                 <% if(!currentUser) { %>
@@ -50,7 +50,7 @@
                     <% } %>
                         <% if(currentUser) { %>
                             <a class="nav-link" href="/logout"><b>Log out</b></a>
-                            <% } %>
+                        <% } %>
             </div>
         </div>
     </div>
