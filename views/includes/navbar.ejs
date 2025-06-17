@@ -1,27 +1,36 @@
 <style>
     .search-btn {
         color: #fff;
-        display: inline;
-        background-color: #fe424d;
-        border-radius: 25px;
-        padding: 0 1rem 0 1rem;
+        background-color: #ff385c;
+        border-radius: 999px;
+        padding: 0.5rem 1.2rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        box-shadow: none;
     }
 
     .search-btn:hover {
+        background-color: #e03150;
         color: #fff;
-        background-color: #fe424d;
     }
 
     .search-btn i {
-        display: inline;
         margin-right: 0.5rem;
     }
 
     .search-inp {
-        border-radius: 25px;
-        padding: 0.5rem 3rem 0.5rem 3rem;
+        border-radius: 999px;
+        padding: 0.5rem 1.5rem;
+        border: 1px solid #ddd;
+        font-size: 0.95rem;
+        width: 250px;
+        box-shadow: none;
     }
 </style>
+
 
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
     <div class="container-fluid">
@@ -38,7 +47,7 @@
                 <input class="form-control me-2 search-inp" type="search" placeholder="Search by location or country"
                 name="location"  />
                 <button class="btn search-btn" type="submit">
-                <i class="fa-solid fa-magnifying-glass"></i> Search
+                <i class="fa-solid fa-magnifying-glass"></i>Search
                 </button> 
                 </form>
             </div>
