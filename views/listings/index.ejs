@@ -195,7 +195,7 @@
                             const listingTitle = button.getAttribute('data-listing-title');
 
                             const form = document.getElementById('wishlistForm');
-                            form.action = `/wishlist/${listingId}`;
+                            form.action = `/wishlist/add/${listingId}`;
 
                             document.getElementById('listingTitlePlaceholder').textContent = listingTitle;
                         });
