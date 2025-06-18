@@ -32,6 +32,21 @@
             margin-left: 4rem;
             align-items: center;
         }
+        .wishlist-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 1.4rem;
+        color: white;
+        z-index: 10;
+    }
+
+    .wishlist-btn:hover {
+        color: #fe424d;
+        cursor: pointer;
+    }
     </style>
     <div id="filters">
         <div class="filter">
@@ -100,8 +115,17 @@
         <% for(let listing of listings){ %>
             <a href="/listings/<%=listing._id%>" class="listing-link">
                 <div class="card col listing-card">
+                    <div class="position-relative">
                     <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image" style="height: 20rem;">
-                    <div class="card-img-overlay"></div>
+    
+                    <!-- Heart Icon -->
+                    <form method="POST" action="/wishlist/toggle/<%= listing._id %>" class="wishlist-form">
+                    <button type="submit" class="wishlist-btn">
+                    <i class="fa-regular fa-heart"></i>
+                    </button>
+                    </form>
+                    </div>
+
                     <div class="card-body">
                         <p class="card-text">
                             <b>
