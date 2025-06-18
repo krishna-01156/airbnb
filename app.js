@@ -19,6 +19,7 @@ const User=require("./models/user.js");
 const listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const userRouter=require("./routes/user.js");
+const wishlistRouter = require("./routes/wishlist.js");
 
 const dbUrl=process.env.ATLASDB_URL;
 
@@ -38,8 +39,10 @@ app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
+app.use(express.json());
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
+
 
 
 const store=MongoStore.create({
@@ -84,6 +87,7 @@ app.use((req,res,next)=>{
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
 app.use("/",userRouter);
+app.use("/wishlist", wishlistRouter);
 
 app.get("/", (req, res) => {
     res.redirect("/listings");

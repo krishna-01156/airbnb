@@ -1,0 +1,50 @@
+<% layout("/layouts/boilerplate") -%>
+
+    <h2 class="mt-4 mb-3">Your Wishlists</h2>
+
+    <% if (wishlists.length===0) { %>
+        <p>You have no wishlists yet.</p>
+        <% } else { %>
+            <div class="container">
+                <div class="row">
+                    <% wishlists.forEach(wishlist=> { %>
+                        <div class="col-md-6 mb-4">
+                            <div class="card shadow">
+                                <div class="card-header bg-light">
+                                    <h5>
+                                        <%= wishlist.name %>
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <% if (wishlist.listings.length===0) { %>
+                                        <p class="text-muted">No listings in this wishlist.</p>
+                                        <% } else { %>
+                                            <div class="row">
+                                                <% wishlist.listings.forEach(listing=> { %>
+                                                    <div class="col-sm-6 mb-3">
+                                                        <a href="/listings/<%= listing._id %>"
+                                                            class="text-decoration-none text-dark">
+                                                            <div class="card">
+                                                                <img src="<%= listing.image.url %>" class="card-img-top"
+                                                                    style="height: 10rem; object-fit: cover;">
+                                                                <div class="card-body">
+                                                                    <h6 class="card-title mb-1">
+                                                                        <%= listing.title %>
+                                                                    </h6>
+                                                                    <p class="mb-0">&#8377;<%=
+                                                                            listing.price.toLocaleString("en-IN") %>
+                                                                            /night</p>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <% }) %>
+                                            </div>
+                                            <% } %>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+            </div>
+            <% } %>

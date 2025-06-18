@@ -76,6 +76,18 @@ body{
     background-color: white;
     opacity: 0.2;
 }
+/*wishlist heart*/
+.wishlist-btn .fa-heart {
+    transition: color 0.2s ease-in-out;
+}
+
+.wishlist-btn .active {
+    color: #fe424d !important; /* Airbnb red */
+}
+
+.fas.fa-heart.active {
+    color: #fe424d;
+}
 
 /*New listing*/
 .add-btn{
