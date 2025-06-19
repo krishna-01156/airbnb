@@ -119,33 +119,34 @@
 
                 <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
                     <% for(let listing of listings){ %>
-                        <a href="/listings/<%=listing._id%>" class="listing-link">
-                            <div class="card col listing-card">
-                                <div class="position-relative">
+                        <div class="col">
+                            <div class="card listing-card position-relative">
+                                <a href="/listings/<%=listing._id%>">
                                     <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image"
                                         style="height: 20rem;">
+                                </a>
 
-                                    <!-- Heart Icon -->
-                                    <button type="button" class="wishlist-btn" data-bs-toggle="modal"
-                                        data-bs-target="#wishlistModal" data-listing-id="<%= listing._id %>"
-                                        data-listing-title="<%= listing.title %>">
-                                        <i class="fa-heart <%= listing.isWishlisted ? 'fas active' : 'far' %>"></i>
-                                    </button>
+                                <!-- Wishlist Button -->
+                                <button type="button" class="wishlist-btn" data-bs-toggle="modal"
+                                    data-bs-target="#wishlistModal" data-listing-id="<%= listing._id %>"
+                                    data-listing-title="<%= listing.title %>">
+                                    <i class="fa-heart <%= listing.isWishlisted ? 'fas active' : 'far' %>"></i>
+                                </button>
 
-
-                                    <div class="card-body">
-                                        <p class="card-text">
-                                            <b>
-                                                <%= listing.title %>
-                                            </b><br>
-                                            &#8377;<%= listing.price.toLocaleString("en-IN") %>/night
-                                                <i class="tax-info"> &nbsp; +18%GST</i>
-                                        </p>
-                                    </div>
+                                <div class="card-body">
+                                    <p class="card-text" style="color: black;">
+                                        <b>
+                                            <%= listing.title %>
+                                        </b><br>
+                                        ₹<%= listing.price.toLocaleString("en-IN") %>/night
+                                            <i class="tax-info"> &nbsp; +18%GST</i>
+                                    </p>
                                 </div>
-                        </a>
+                            </div>
+                        </div>
                         <% } %>
                 </div>
+
                 <% } %>
                     <!-- Wishlist Modal -->
                     <div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="wishlistModalLabel"
@@ -225,7 +226,7 @@
                                     heartIcon.classList.remove('far');
                                     heartIcon.classList.add('fas', 'active');
 
-                                
+
                                     document.getElementById('wishlistName').value = "";
                                 } else {
                                     console.error("Failed to add to wishlist");
