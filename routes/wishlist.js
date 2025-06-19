@@ -4,7 +4,7 @@ const wishlistController = require("../controllers/wishlist");
 const { isLoggedIn } = require("../middleware");
 
 // Show all wishlists for the current user
-router.get("/", isLoggedIn, wishlistController.getWishlists);
+router.get("/", isLoggedIn, wishlistController.viewWishlists);
 
 // Create a new wishlist
 router.post("/create", isLoggedIn, wishlistController.createWishlist);

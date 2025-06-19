@@ -1,4 +1,5 @@
 const Wishlist = require('../models/wishlist.js');
+const Listing=require('../models/listing.js');
 
 module.exports.addToWishlist = async (req, res) => {
     try {
