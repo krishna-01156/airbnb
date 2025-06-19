@@ -26,10 +26,12 @@ module.exports.index = async (req, res) => {
     const Wishlist = require("../models/wishlist");
 
     let wishlistedIds = [];
+    let userWishlists = [];
 
     if (req.isAuthenticated()) {
         const wishlists = await Wishlist.find({ user: req.user._id });
         wishlistedIds = wishlists.flatMap(w => w.listings.map(id => id.toString()));
+        userWishlists = wishlists; // contains wishlist names and IDs
     }
 
     const listingsWithStatus = listings.map(listing => {
@@ -39,8 +41,10 @@ module.exports.index = async (req, res) => {
         };
     });
 
-    res.render("listings/index", { listings: listingsWithStatus });
-
+    res.render("listings/index", {
+        listings: listingsWithStatus,
+        userWishlists // 👈 pass to EJS
+    });
 };
 
 

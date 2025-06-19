@@ -159,15 +159,32 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
+
                                     <div class="modal-body">
                                         <p>Which wishlist do you want to add <b id="listingTitlePlaceholder"></b> to?
                                         </p>
-                                        <div class="mb-3">
+
+                                        <!-- Existing Wishlist Selection -->
+                                        <div id="existingWishlistSection" style="display: none;" class="mb-3">
+                                            <label class="form-label">Choose Wishlist</label>
+                                            <div id="wishlistOptions"></div>
+
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="radio" name="selectedWishlistId"
+                                                    value="new" id="create-new-radio">
+                                                <label class="form-check-label" for="create-new-radio">Create New
+                                                    Wishlist</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- New Wishlist Name Input -->
+                                        <div id="newWishlistSection" class="mb-3">
                                             <label for="wishlistName" class="form-label">Wishlist Name</label>
                                             <input type="text" class="form-control" id="wishlistName" name="name"
                                                 placeholder="Favorites" required>
                                         </div>
                                     </div>
+
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-danger">Add</button>
                                     </div>
@@ -177,35 +194,109 @@
                     </div>
 
 
+
                     <script>
+                        // Toggle tax info visibility
                         let taxswitch = document.getElementById("switchCheckDefault");
-                        taxswitch.addEventListener("click", () => {
+                        taxswitch?.addEventListener("click", () => {
                             let taxinfo = document.getElementsByClassName("tax-info");
-                            for (info of taxinfo) {
-                                if (info.style.display != "inline") {
-                                    info.style.display = "inline";
-                                } else {
-                                    info.style.display = "none";
-                                }
+                            for (let info of taxinfo) {
+                                info.style.display = (info.style.display !== "inline") ? "inline" : "none";
                             }
                         });
+
+                        // Set modal info and load wishlists dynamically
                         const wishlistModal = document.getElementById('wishlistModal');
-                        wishlistModal.addEventListener('show.bs.modal', function (event) {
+                        wishlistModal.addEventListener('show.bs.modal', async function (event) {
                             const button = event.relatedTarget;
                             const listingId = button.getAttribute('data-listing-id');
                             const listingTitle = button.getAttribute('data-listing-title');
 
                             const form = document.getElementById('wishlistForm');
                             form.action = `/wishlist/add/${listingId}`;
-
                             document.getElementById('listingTitlePlaceholder').textContent = listingTitle;
+
+                            const optionsDiv = document.getElementById('wishlistOptions');
+                            optionsDiv.innerHTML = `<p>Loading...</p>`;
+
+                            try {
+                                const res = await fetch('/wishlist/check');
+                                const data = await res.json();
+
+                                if (data.wishlists.length === 0) {
+                                    optionsDiv.innerHTML = `
+                    <div class="mb-3">
+                        <label for="wishlistName" class="form-label">Wishlist Name</label>
+                        <input type="text" class="form-control" id="wishlistName" name="name" placeholder="Favorites" required>
+                    </div>`;
+                                } else {
+                                    let html = '<div class="mb-3"><label class="form-label">Select Wishlist</label>';
+                                    data.wishlists.forEach(w => {
+                                        html += `
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="selectedWishlistId" value="${w._id}" id="wishlist-${w._id}">
+                            <label class="form-check-label" for="wishlist-${w._id}">${w.name}</label>
+                        </div>`;
+                                    });
+
+                                    html += `
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="radio" name="selectedWishlistId" value="new" id="create-new-radio">
+                        <label class="form-check-label" for="create-new-radio">Create New Wishlist</label>
+                    </div>
+                    <div id="newWishlistInput" class="mt-2" style="display: none;">
+                        <label for="wishlistName" class="form-label">New Wishlist Name</label>
+                        <input type="text" class="form-control" id="wishlistName" name="name" placeholder="Favorites">
+                    </div>
+                </div>`;
+
+                                    optionsDiv.innerHTML = html;
+
+                                    // Add radio change listeners for dynamic content
+                                    document.querySelectorAll('input[name="selectedWishlistId"]').forEach(r => {
+                                        r.addEventListener('change', () => {
+                                            const newInput = document.getElementById("newWishlistInput");
+                                            const nameInput = document.getElementById("wishlistName");
+                                            if (r.value === "new") {
+                                                newInput.style.display = "block";
+                                                nameInput.setAttribute("required", "required");
+                                            } else {
+                                                newInput.style.display = "none";
+                                                nameInput.removeAttribute("required");
+                                            }
+                                        });
+                                    });
+                                }
+                            } catch (err) {
+                                console.error("Failed to fetch wishlists:", err);
+                                optionsDiv.innerHTML = `<p>Error loading wishlists.</p>`;
+                            }
                         });
+
+                        // Submit wishlist form
                         document.getElementById('wishlistForm').addEventListener('submit', async function (e) {
                             e.preventDefault();
 
                             const form = e.target;
                             const listingId = form.action.split('/').pop();
-                            const wishlistName = document.getElementById('wishlistName').value;
+
+                            const selectedRadio = document.querySelector('input[name="selectedWishlistId"]:checked');
+                            const isNew = selectedRadio && selectedRadio.value === "new";
+                            const wishlistName = document.getElementById('wishlistName')?.value;
+
+                            let body = {};
+                            if (isNew) {
+                                if (!wishlistName || wishlistName.trim() === "") {
+                                    alert("Please provide a name for the new wishlist.");
+                                    return;
+                                }
+                                body = { name: wishlistName };
+                            } else if (selectedRadio) {
+                                body = { wishlistId: selectedRadio.value };
+                            } else {
+                                alert("Please select or create a wishlist.");
+                                return;
+                            }
 
                             try {
                                 const res = await fetch(form.action, {
@@ -214,20 +305,23 @@
                                         'Content-Type': 'application/json',
                                         'Accept': 'application/json',
                                     },
-                                    body: JSON.stringify({ name: wishlistName })
+                                    body: JSON.stringify(body)
                                 });
 
                                 if (res.ok) {
-                                    alert('Wishlist added successfully');
+                                    // Update heart icon
+                                    const heartIcon = document.querySelector(`.wishlist-btn[data-listing-id="${listingId}"] i`);
+                                    if (heartIcon) {
+                                        heartIcon.classList.remove('far');
+                                        heartIcon.classList.add('fas', 'active');
+                                    }
+
+                                    // Close modal
                                     const modal = bootstrap.Modal.getInstance(document.getElementById('wishlistModal'));
                                     modal.hide();
 
-                                    const heartIcon = document.querySelector(`.wishlist-btn[data-listing-id="${listingId}"] i`);
-                                    heartIcon.classList.remove('far');
-                                    heartIcon.classList.add('fas', 'active');
-
-
-                                    document.getElementById('wishlistName').value = "";
+                                    // Redirect or reload homepage
+                                    window.location.href = "/listings";
                                 } else {
                                     console.error("Failed to add to wishlist");
                                 }

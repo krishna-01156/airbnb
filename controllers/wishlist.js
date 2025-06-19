@@ -4,35 +4,46 @@ const Listing=require('../models/listing.js');
 module.exports.addToWishlist = async (req, res) => {
     try {
         const { listingId } = req.params;
-        const { name } = req.body;
+        const { name, wishlistId } = req.body;
+        const userId = req.user._id;
 
         const listing = await Listing.findById(listingId);
         if (!listing) {
             return res.status(404).json({ error: "Listing not found" });
         }
 
-        let wishlist = await Wishlist.findOne({ user: req.user._id, name });
+        let wishlist;
 
-        if (!wishlist) {
+        if (wishlistId) {
+            // ➤ Add to existing wishlist
+            wishlist = await Wishlist.findOne({ _id: wishlistId, user: userId });
+            if (!wishlist) {
+                return res.status(404).json({ error: "Wishlist not found" });
+            }
+        } else if (name) {
+            // ➤ Create a new wishlist
             wishlist = new Wishlist({
-                user: req.user._id,
+                user: userId,
                 name,
-                listings: [listing._id]
+                listings: []
             });
         } else {
-            if (!wishlist.listings.includes(listing._id)) {
-                wishlist.listings.push(listing._id);
-            }
+            return res.status(400).json({ error: "Missing wishlist name or ID" });
+        }
+
+        // ➤ Add listing to wishlist if not already there
+        if (!wishlist.listings.includes(listing._id)) {
+            wishlist.listings.push(listing._id);
         }
 
         await wishlist.save();
 
-        // If it's a fetch() request, respond with JSON
+        // ➤ Return JSON if fetch was used
         if (req.headers.accept.includes('application/json')) {
             return res.status(200).json({ success: true, wishlistId: wishlist._id });
         }
 
-        // Else fallback
+        // ➤ Fallback redirect
         req.flash("success", "Added to wishlist!");
         res.redirect("/listings");
 
