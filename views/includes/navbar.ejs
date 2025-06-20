@@ -30,15 +30,52 @@
         box-shadow: none;
     }
 
-    .dropdown-menu {
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        padding: 10px;
+    .dropdown-menu-custom {
+        border-radius: 16px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border: none;
+        padding: 0.5rem 0;
     }
 
-    .dropdown-item {
-        font-size: 15px;
-        padding: 10px 15px;
+    .dropdown-item-custom {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.95rem;
+        color: #000;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+    }
+
+    .dropdown-item-custom:hover {
+        background-color: #f7f7f7;
+        color: #000;
+    }
+
+    .profile-circle {
+        width: 35px;
+        height: 35px;
+        background-color: #222;
+        color: #fff;
+        font-weight: 600;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+
+    .hamburger-circle {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background-color: #f7f7f7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dropdown-toggle::after {
+        display: none !important;
     }
 </style>
 
@@ -64,29 +101,40 @@
                 </form>
             </div>
 
-            <!-- Right side: Airbnb your home + Hamburger Dropdown -->
-            <div class="navbar-nav ms-auto align-items-center">
+            <div class="navbar-nav ms-auto align-items-center gap-2">
                 <a class="nav-link" href="/listings/new">Airbnb your home</a>
 
-                <!-- Hamburger Dropdown -->
                 <div class="dropdown">
-                    <button class="btn btn-light rounded-circle border dropdown-toggle" type="button" id="userMenuBtn"
-                        data-bs-toggle="dropdown" aria-expanded="false" style="padding: 8px 12px; box-shadow: none;">
-                        <i class="fas fa-bars"></i>
+                    <button class="btn d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" style="border: none; background: none;">
+                        <div class="hamburger-circle">
+                            <i class="fa-solid fa-bars"></i>
+                        </div>
+                        <% if (currentUser) { %>
+                            <div class="profile-circle">
+                                <%= currentUser.username.charAt(0).toUpperCase() %>
+                            </div>
+                            <% } %>
                     </button>
 
-                    <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="userMenuBtn">
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
                         <% if (!currentUser) { %>
-                            <li><a class="dropdown-item" href="/login">Log in</a></li>
-                            <li><a class="dropdown-item" href="/signup">Sign up</a></li>
+                            <li><a class="dropdown-item dropdown-item-custom" href="/login">Log in</a></li>
+                            <li><a class="dropdown-item dropdown-item-custom" href="/signup">Sign up</a></li>
                             <% } else { %>
-                                <li><a class="dropdown-item" href="/wishlist">Wishlists</a></li>
-                                <li><a class="dropdown-item" href="/logout">Log out</a></li>
+                                <li><a class="dropdown-item dropdown-item-custom" href="/wishlist"><i
+                                            class="fa-regular fa-heart"></i> Wishlists</a></li>
+                                <li>
+                                    <form action="/logout" method="POST" class="d-inline">
+                                        <button type="submit"
+                                            class="dropdown-item dropdown-item-custom w-100 text-start"><i
+                                                class="fa-solid fa-arrow-right-from-bracket"></i> Log out</button>
+                                    </form>
+                                </li>
                                 <% } %>
                     </ul>
                 </div>
             </div>
-
         </div>
     </div>
 </nav>
