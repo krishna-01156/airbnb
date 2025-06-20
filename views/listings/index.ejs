@@ -181,7 +181,8 @@
 
 
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-danger">Add</button>
+                                        <button type="submit" class="btn btn-danger"
+                                            id="wishlistSubmitButton">Add</button>
                                     </div>
                                 </div>
                             </form>
@@ -205,6 +206,8 @@
                             }
 
                             const wishlistModal = document.getElementById('wishlistModal');
+                            const wishlistNameInput = document.getElementById("wishlistName");
+                            const submitBtn = document.getElementById("wishlistSubmitButton");
 
                             wishlistModal.addEventListener('show.bs.modal', async function (event) {
                                 const button = event.relatedTarget;
@@ -225,7 +228,6 @@
 
                                     wishlistOptionsDiv.innerHTML = ''; // clear loading
 
-                                    // Render existing wishlists
                                     if (wishlists.length > 0) {
                                         const label = document.createElement("label");
                                         label.classList.add("form-label");
@@ -241,21 +243,28 @@
                             </div>
                         `;
                                         });
-
-                                        // Create new option
-
-
-
-
-                                    } else {
-                                        // No wishlist exists — show input
-                                        wishlistOptionsDiv.innerHTML = `
-                        <div class="mb-3">
-                            <label for="wishlistName" class="form-label">Wishlist Name</label>
-                            <input type="text" class="form-control" id="wishlistName" name="name" placeholder="Favorites" required>
-                        </div>
-                    `;
                                     }
+
+                                    // Setup dynamic button label logic
+                                    setTimeout(() => {
+                                        const radios = document.querySelectorAll('input[name="selectedWishlistId"]');
+                                        radios.forEach(radio => {
+                                            radio.addEventListener("change", () => {
+                                                document.getElementById("wishlistName").value = "";
+                                                submitBtn.textContent = "Add";
+                                            });
+                                        });
+
+                                        document.getElementById("wishlistName").addEventListener("input", () => {
+                                            const val = document.getElementById("wishlistName").value.trim();
+                                            if (val !== "") {
+                                                radios.forEach(r => r.checked = false);
+                                                submitBtn.textContent = "Create";
+                                            } else {
+                                                submitBtn.textContent = "Add";
+                                            }
+                                        });
+                                    }, 100); // Slight delay to ensure DOM is updated
 
                                 } catch (err) {
                                     console.error("Failed to load user wishlists:", err);
@@ -263,7 +272,6 @@
                                 }
                             });
 
-                            // Form submit handler
                             document.getElementById('wishlistForm').addEventListener('submit', async function (e) {
                                 e.preventDefault();
                                 const form = e.target;
@@ -271,10 +279,13 @@
 
                                 const selectedRadio = document.querySelector('input[name="selectedWishlistId"]:checked');
                                 const wishlistName = document.getElementById('wishlistName')?.value?.trim();
+                                const submitBtn = document.getElementById("wishlistSubmitButton");
 
                                 let body = {};
+                                let isNew = false;
 
                                 if (wishlistName) {
+                                    isNew = true;
                                     body = { name: wishlistName };
                                 } else if (selectedRadio) {
                                     body = { wishlistId: selectedRadio.value };
@@ -283,6 +294,8 @@
                                     return;
                                 }
 
+                                submitBtn.disabled = true;
+                                submitBtn.textContent = isNew ? "Creating..." : "Adding...";
 
                                 try {
                                     const res = await fetch(form.action, {
@@ -302,12 +315,14 @@
                                         }
 
                                         bootstrap.Modal.getInstance(wishlistModal).hide();
-                                        window.location.href = "/listings";
                                     } else {
                                         console.error("Failed to add to wishlist");
                                     }
                                 } catch (err) {
                                     console.error("Request error:", err);
+                                } finally {
+                                    submitBtn.disabled = false;
+                                    submitBtn.textContent = isNew ? "Create" : "Add";
                                 }
                             });
                         });
