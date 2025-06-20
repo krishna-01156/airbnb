@@ -56,36 +56,37 @@
 
             <div class="navbar-nav ms-auto">
                 <form class="d-flex" role="search" action="/listings" method="GET">
-                    <input class="form-control me-2 search-inp" type="search" placeholder="Search by location or country" name="location" />
+                    <input class="form-control me-2 search-inp" type="search"
+                        placeholder="Search by location or country" name="location" />
                     <button class="btn search-btn" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>Search
                     </button>
                 </form>
             </div>
 
+            <!-- Right side: Airbnb your home + Hamburger Dropdown -->
             <div class="navbar-nav ms-auto align-items-center">
                 <a class="nav-link" href="/listings/new">Airbnb your home</a>
 
-                <!-- Hamburger Menu -->
+                <!-- Hamburger Dropdown -->
                 <div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle" type="button" id="hamburgerMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-light rounded-circle border dropdown-toggle" type="button" id="userMenuBtn"
+                        data-bs-toggle="dropdown" aria-expanded="false" style="padding: 8px 12px; box-shadow: none;">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="hamburgerMenu">
+
+                    <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="userMenuBtn">
                         <% if (!currentUser) { %>
                             <li><a class="dropdown-item" href="/login">Log in</a></li>
                             <li><a class="dropdown-item" href="/signup">Sign up</a></li>
-                        <% } else { %>
-                            <li><a class="dropdown-item" href="/wishlist">Wishlists</a></li>
-                            <li>
-                                <form action="/logout?_method=POST" method="POST">
-                                    <button class="dropdown-item" type="submit">Log out</button>
-                                </form>
-                            </li>
-                        <% } %>
+                            <% } else { %>
+                                <li><a class="dropdown-item" href="/wishlist">Wishlists</a></li>
+                                <li><a class="dropdown-item" href="/logout">Log out</a></li>
+                                <% } %>
                     </ul>
                 </div>
             </div>
+
         </div>
     </div>
 </nav>
