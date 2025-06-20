@@ -69,3 +69,15 @@ module.exports.viewWishlists = async (req, res) => {
     const wishlists = await Wishlist.find({ user: req.user._id }).populate("listings");
     res.render("wishlists/index", { wishlists });
 };
+
+module.exports.removeFromWishlist = async (req, res) => {
+    const userId = req.user._id;
+    const listingId = req.params.listingId;
+
+    await Wishlist.updateMany(
+        { user: userId },
+        { $pull: { listings: listingId } }
+    );
+
+    res.status(200).json({ success: true });
+};

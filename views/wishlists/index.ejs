@@ -1,41 +1,97 @@
 <% layout("/layouts/boilerplate") -%>
 
-<div class="container mt-5 mb-5">
-  <h2 class="fw-bold fs-1 mb-4">Your Wishlists</h2>
+    <div class="container mt-5 mb-5">
+        <h2 class="fw-bold fs-1 mb-4">Your Wishlists</h2>
 
-  <% if (wishlists.length === 0) { %>
-    <p>You have no wishlists yet.</p>
-  <% } else { %>
-    <% wishlists.forEach(wishlist => { %>
-      <div class="mb-5">
-        <h4 class="fw-semibold mb-3"><%= wishlist.name %></h4>
+        <% if (wishlists.length===0) { %>
+            <p>You have no wishlists yet.</p>
+            <% } else { %>
+                <% wishlists.forEach(wishlist=> { %>
+                    <div class="mb-5">
+                        <h4 class="fw-semibold mb-3">
+                            <%= wishlist.name %>
+                        </h4>
 
-        <% if (wishlist.listings.length === 0) { %>
-          <p class="text-muted">No listings in this wishlist.</p>
-        <% } else { %>
-          <div class="d-flex overflow-auto gap-4 pb-2">
-            <% wishlist.listings.forEach(listing => { %>
-              <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
-                <div class="card border-0 shadow-sm rounded" style="min-width: 300px;">
-                  <img src="<%= listing.image.url %>" class="card-img-top rounded-top"
-                       style="height: 200px; object-fit: cover;" alt="<%= listing.title %>">
-                  <div class="card-body px-3 pb-3">
-                    <p class="fw-medium mb-1"><%= listing.title %></p>
-                    <small class="text-muted">₹<%= listing?.price?.toLocaleString("en-IN") || 'N/A' %>/night</small>
-                  </div>
-                </div>
-              </a>
-            <% }) %>
-          </div>
-        <% } %>
-      </div>
-    <% }) %>
-  <% } %>
-</div>
+                        <% if (wishlist.listings.length===0) { %>
+                            <p class="text-muted">No listings in this wishlist.</p>
+                            <% } else { %>
+                                <div class="d-flex overflow-auto gap-4 pb-2">
+                                    <% wishlist.listings.forEach(listing=> { %>
+                                        <div class="position-relative">
+                                            <button
+                                                class="wishlist-remove-btn btn position-absolute top-0 end-0 m-2 text-danger"
+                                                data-listing-id="<%= listing._id %>">
+                                                <i class="fa-solid fa-heart"></i>
+                                            </button>
+                                            <a href="/listings/<%= listing._id %>"
+                                                class="text-decoration-none text-dark">
+                                        </div>
+                                        <div class="card border-0 shadow-sm rounded" style="min-width: 300px;">
+                                            <img src="<%= listing.image.url %>" class="card-img-top rounded-top"
+                                                style="height: 200px; object-fit: cover;" alt="<%= listing.title %>">
+                                            <div class="card-body px-3 pb-3">
+                                                <p class="fw-medium mb-1">
+                                                    <%= listing.title %>
+                                                </p>
+                                                <small class="text-muted">₹<%= listing?.price?.toLocaleString("en-IN")
+                                                        || 'N/A' %>
+                                                        /night</small>
+                                            </div>
+                                        </div>
+                                        </a>
+                                        <% }) %>
+                                </div>
+                                <% } %>
+                    </div>
+                    <% }) %>
+                        <% } %>
+    </div>
 
-<style>
-  .card:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-  }
-</style>
+    <style>
+        .card:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".wishlist-remove-btn").forEach(btn => {
+                btn.addEventListener("click", async (e) => {
+                    e.preventDefault();
+                    const icon = btn.querySelector("i");
+                    const listingId = btn.dataset.listingId;
+
+                    try {
+                        const res = await fetch(`/wishlist/remove/${listingId}`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            }
+                        });
+
+                        if (res.ok) {
+                            // Toggle icon class: remove active styles
+                            icon.classList.remove("fa-solid", "active");
+                            icon.classList.add("fa-regular");
+
+                            // Animate card fade-out and remove
+                            const card = btn.closest(".col-sm-6");
+                            card.classList.add("fade-out");
+                            setTimeout(() => card.remove(), 300);
+                        } else {
+                            alert("Failed to remove from wishlist.");
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert("An error occurred.");
+                    }
+                });
+            });
+        });
+    </script>

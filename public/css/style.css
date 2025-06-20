@@ -77,16 +77,36 @@ body{
     opacity: 0.2;
 }
 /*wishlist heart*/
-.wishlist-btn .fa-heart {
-    transition: color 0.2s ease-in-out;
+.wishlist-btn {
+    background-color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 8px;
+    transition: transform 0.2s ease-in-out;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-.wishlist-btn .active {
-    color: #fe424d !important; /* Airbnb red */
+.wishlist-btn:hover {
+    transform: scale(1.15);
+    cursor: pointer;
 }
 
-.fas.fa-heart.active {
-    color: #fe424d;
+.wishlist-btn i.fa-heart {
+    color: #222; /* dark gray */
+    transition: all 0.2s ease-in-out;
+}
+
+.wishlist-btn i.active {
+    color: white;
+    background-color: #FF385C; /* Airbnb red */
+    border-radius: 50%;
+    padding: 6px;
+    border: 2px solid white;
+    font-size: 0.95rem;
 }
 
 /*New listing*/

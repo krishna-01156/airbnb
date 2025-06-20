@@ -127,11 +127,14 @@
                                 </a>
 
                                 <!-- Wishlist Button -->
-                                <button type="button" class="wishlist-btn" data-bs-toggle="modal"
-                                    data-bs-target="#wishlistModal" data-listing-id="<%= listing._id %>"
-                                    data-listing-title="<%= listing.title %>">
-                                    <i class="fa-heart <%= listing.isWishlisted ? 'fas active' : 'far' %>"></i>
+                                <!-- Wishlist Button -->
+                                <button type="button" class="wishlist-btn position-absolute top-0 end-0 m-2"
+                                    data-bs-toggle="modal" data-bs-target="#wishlistModal"
+                                    data-listing-id="<%= listing._id %>" data-listing-title="<%= listing.title %>">
+                                    <i
+                                        class="fa-heart <%= listing.isWishlisted ? 'fa-solid active' : 'fa-regular' %>"></i>
                                 </button>
+
 
                                 <div class="card-body">
                                     <p class="card-text" style="color: black;">

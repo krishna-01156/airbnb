@@ -17,6 +17,6 @@ router.get("/user", isLoggedIn, wishlistController.getUserWishlists);
 router.post("/add/:listingId", isLoggedIn, wishlistController.addToWishlist);
 
 // Remove a listing from a wishlist
-// router.post("/remove/:listingId", isLoggedIn, wishlistController.removeFromWishlist);
+router.post("/remove/:listingId", isLoggedIn, wishlistController.removeFromWishlist);
 
 module.exports = router;
