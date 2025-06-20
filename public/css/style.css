@@ -87,7 +87,7 @@ body{
 .wishlist-btn i.fa-heart {
     font-size: 1.5rem;
     color: transparent;
-    -webkit-text-stroke: 1px white;
+    -webkit-text-stroke: 1px black;
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
