@@ -19,29 +19,27 @@
                                     <% wishlist.listings.forEach(listing=> { %>
                                         <div class="position-relative">
                                             <button class="wishlist-btn btn position-absolute top-0 end-0 m-2"
-                                                data-listing-id="<%= listing._id %>"
-                                                data-is-wishlisted="<%= listing.isWishlisted %>">
+                                                data-listing-id="<%= listing._id %>">
                                                 <i
                                                     class="fa-heart <%= listing.isWishlisted ? 'fa-solid active' : 'fa-regular' %>"></i>
                                             </button>
                                             <a href="/listings/<%= listing._id %>"
                                                 class="text-decoration-none text-dark">
+                                                <div class="card border-0 shadow-sm rounded" style="min-width: 300px;">
+                                                    <img src="<%= listing.image.url %>" class="card-img-top rounded-top"
+                                                        style="height: 200px; object-fit: cover;"
+                                                        alt="<%= listing.title %>">
+                                                    <div class="card-body px-3 pb-3">
+                                                        <p class="fw-medium mb-1">
+                                                            <%= listing.title %>
+                                                        </p>
+                                                        <small class="text-muted">₹<%=
+                                                                listing?.price?.toLocaleString("en-IN") || 'N/A' %>
+                                                                /night</small>
+                                                    </div>
+                                                </div>
+                                            </a>
                                         </div>
-
-
-                                        <div class="card border-0 shadow-sm rounded" style="min-width: 300px;">
-                                            <img src="<%= listing.image.url %>" class="card-img-top rounded-top"
-                                                style="height: 200px; object-fit: cover;" alt="<%= listing.title %>">
-                                            <div class="card-body px-3 pb-3">
-                                                <p class="fw-medium mb-1">
-                                                    <%= listing.title %>
-                                                </p>
-                                                <small class="text-muted">₹<%= listing?.price?.toLocaleString("en-IN")
-                                                        || 'N/A' %>
-                                                        /night</small>
-                                            </div>
-                                        </div>
-                                        </a>
                                         <% }) %>
                                 </div>
                                 <% } %>
@@ -60,6 +58,30 @@
             opacity: 0;
             transition: opacity 0.3s ease-out;
         }
+
+        .wishlist-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .wishlist-btn i.fa-heart {
+            font-size: 1.5rem;
+            color: transparent;
+            -webkit-text-stroke: 1px white;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .wishlist-btn i.fa-heart.active {
+            color: #fe424d;
+            -webkit-text-stroke: 1px white;
+        }
+
+        .wishlist-btn i.fa-heart:hover {
+            transform: scale(1.2);
+        }
     </style>
 
     <script>
@@ -73,7 +95,7 @@
                     const isActive = icon.classList.contains("active");
 
                     if (isActive) {
-                        // 🧹 Remove from wishlist
+                        // Remove from wishlist
                         try {
                             const res = await fetch(`/wishlist/remove/${listingId}`, {
                                 method: "POST",
@@ -86,11 +108,11 @@
                                 icon.classList.remove("fa-solid", "active");
                                 icon.classList.add("fa-regular");
 
-                                // Optional: Remove card if you're on /wishlist page
-                                const card = btn.closest(".col-sm-6");
-                                if (card) {
-                                    card.classList.add("fade-out");
-                                    setTimeout(() => card.remove(), 300);
+                                // Optional: remove listing card
+                                const listingCard = btn.closest(".position-relative");
+                                if (listingCard) {
+                                    listingCard.classList.add("fade-out");
+                                    setTimeout(() => listingCard.remove(), 300);
                                 }
                             } else {
                                 alert("Failed to remove from wishlist.");
@@ -100,7 +122,7 @@
                             alert("Error removing from wishlist.");
                         }
                     } else {
-                        // ➕ Add to wishlist (show modal)
+                        // Open modal to add to wishlist
                         const modal = new bootstrap.Modal(document.getElementById('wishlistModal'));
                         document.getElementById('wishlistModal').setAttribute('data-listing-id', listingId);
                         modal.show();
