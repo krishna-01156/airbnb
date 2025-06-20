@@ -29,8 +29,18 @@
         width: 250px;
         box-shadow: none;
     }
-</style>
 
+    .dropdown-menu {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 10px;
+    }
+
+    .dropdown-item {
+        font-size: 15px;
+        padding: 10px 15px;
+    }
+</style>
 
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
     <div class="container-fluid">
@@ -38,29 +48,43 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-link" href="/listings">Explore</a>
             </div>
+
             <div class="navbar-nav ms-auto">
                 <form class="d-flex" role="search" action="/listings" method="GET">
-                <input class="form-control me-2 search-inp" type="search" placeholder="Search by location or country"
-                name="location"  />
-                <button class="btn search-btn" type="submit">
-                <i class="fa-solid fa-magnifying-glass"></i>Search
-                </button> 
+                    <input class="form-control me-2 search-inp" type="search" placeholder="Search by location or country" name="location" />
+                    <button class="btn search-btn" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>Search
+                    </button>
                 </form>
             </div>
 
-            <div class="navbar-nav ms-auto">
+            <div class="navbar-nav ms-auto align-items-center">
                 <a class="nav-link" href="/listings/new">Airbnb your home</a>
-                <% if(!currentUser) { %>
-                    <a class="nav-link" href="/signup"><b>Sign up</b></a>
-                    <a class="nav-link" href="/login"><b>Log in</b></a>
-                    <% } %>
-                        <% if(currentUser) { %>
-                            <a class="nav-link" href="/logout"><b>Log out</b></a>
+
+                <!-- Hamburger Menu -->
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle" type="button" id="hamburgerMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="hamburgerMenu">
+                        <% if (!currentUser) { %>
+                            <li><a class="dropdown-item" href="/login">Log in</a></li>
+                            <li><a class="dropdown-item" href="/signup">Sign up</a></li>
+                        <% } else { %>
+                            <li><a class="dropdown-item" href="/wishlist">Wishlists</a></li>
+                            <li>
+                                <form action="/logout?_method=POST" method="POST">
+                                    <button class="dropdown-item" type="submit">Log out</button>
+                                </form>
+                            </li>
                         <% } %>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
