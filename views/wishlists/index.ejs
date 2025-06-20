@@ -17,8 +17,7 @@
                             <% } else { %>
                                 <div class="d-flex overflow-auto gap-4 pb-2">
                                     <% wishlist.listings.forEach(listing=> { %>
-                                        <div class="position-relative listing-card"
-                                            data-listing-id="<%= listing._id %>">
+                                        <div class="position-relative">
                                             <button class="wishlist-btn btn position-absolute top-0 end-0 m-2"
                                                 data-listing-id="<%= listing._id %>"
                                                 data-is-wishlisted="<%= listing.isWishlisted %>">
@@ -35,9 +34,10 @@
                                                         <p class="fw-medium mb-1">
                                                             <%= listing.title %>
                                                         </p>
-                                                        <small class="text-muted">₹<%=
-                                                                listing?.price?.toLocaleString("en-IN") || 'N/A' %>
-                                                                /night</small>
+                                                        <small class="text-muted">
+                                                            ₹<%= listing?.price?.toLocaleString("en-IN") || 'N/A' %>
+                                                                /night
+                                                        </small>
                                                     </div>
                                                 </div>
                                             </a>
@@ -51,16 +51,6 @@
     </div>
 
     <style>
-        .card:hover {
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-        }
-
-        .fade-out {
-            opacity: 0;
-            transition: opacity 0.3s ease-out;
-        }
-
         .wishlist-btn {
             background: none;
             border: none;
@@ -73,28 +63,34 @@
             font-size: 1.5rem;
             color: transparent;
             -webkit-text-stroke: 1.5px white;
-            /* White border even when unfilled */
             transition: transform 0.2s ease, color 0.2s ease;
         }
 
         .wishlist-btn i.fa-heart.active {
             color: #fe424d;
-            /* Airbnb red fill */
+            /* Airbnb red */
             -webkit-text-stroke: 1.5px white;
-            /* White border even when filled */
         }
 
         .wishlist-btn i.fa-heart:hover {
             transform: scale(1.2);
         }
-    </style>
 
+        .card:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+    </style>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll(".wishlist-btn").forEach(btn => {
                 btn.addEventListener("click", async (e) => {
-                    e.stopPropagation(); // prevent <a> tag click
                     e.preventDefault();
 
                     const icon = btn.querySelector("i.fa-heart");
@@ -115,10 +111,10 @@
                                 icon.classList.remove("fa-solid", "active");
                                 icon.classList.add("fa-regular");
 
-                                const listingCard = btn.closest(".listing-card");
-                                if (listingCard) {
-                                    listingCard.classList.add("fade-out");
-                                    setTimeout(() => listingCard.remove(), 300);
+                                const wrapper = btn.closest(".position-relative");
+                                if (wrapper) {
+                                    wrapper.classList.add("fade-out");
+                                    setTimeout(() => wrapper.remove(), 300);
                                 }
                             } else {
                                 alert("Failed to remove from wishlist.");
@@ -128,7 +124,7 @@
                             alert("Error removing from wishlist.");
                         }
                     } else {
-                        // ADD to wishlist → open modal
+                        // ADD to wishlist (show modal)
                         const modal = new bootstrap.Modal(document.getElementById('wishlistModal'));
                         document.getElementById('wishlistModal').setAttribute('data-listing-id', listingId);
                         modal.show();
