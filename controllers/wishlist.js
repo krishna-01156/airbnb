@@ -64,6 +64,17 @@ module.exports.getUserWishlists = async (req, res) => {
 };
 
 
+module.exports.getUserWishlists = async (req, res) => {
+    try {
+        const wishlists = await Wishlist.find({ user: req.user._id });
+        res.status(200).json(wishlists);
+    } catch (err) {
+        console.error("Error fetching user wishlists:", err);
+        res.status(500).json({ error: "Failed to fetch wishlists" });
+    }
+};
+
+
 module.exports.viewWishlists = async (req, res) => {
     const wishlists = await Wishlist.find({ user: req.user._id }).populate("listings");
     res.render("wishlists/index", { wishlists });
