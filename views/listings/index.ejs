@@ -160,30 +160,25 @@
                                             aria-label="Close"></button>
                                     </div>
 
+                                    <!-- Modal Body -->
                                     <div class="modal-body">
-                                        <p>Which wishlist do you want to add <b id="listingTitlePlaceholder"></b> to?
-                                        </p>
+                                        <p>Add <b id="listingTitlePlaceholder"></b> to a wishlist:</p>
 
-                                        <!-- Existing Wishlist Selection -->
-                                        <div id="existingWishlistSection" style="display: none;" class="mb-3">
-                                            <label class="form-label">Choose Wishlist</label>
+                                        <!-- Existing Wishlist Options -->
+                                        <div id="existingWishlistSection" class="mb-3">
+                                            <label class="form-label">Choose an existing wishlist</label>
                                             <div id="wishlistOptions"></div>
-
-                                            <div class="form-check mt-2">
-                                                <input class="form-check-input" type="radio" name="selectedWishlistId"
-                                                    value="new" id="create-new-radio">
-                                                <label class="form-check-label" for="create-new-radio">Create New
-                                                    Wishlist</label>
-                                            </div>
                                         </div>
 
-                                        <!-- New Wishlist Name Input -->
+                                        <!-- Create New Wishlist -->
+                                        <hr>
                                         <div id="newWishlistSection" class="mb-3">
-                                            <label for="wishlistName" class="form-label">Wishlist Name</label>
+                                            <label class="form-label">Or create a new wishlist</label>
                                             <input type="text" class="form-control" id="wishlistName" name="name"
-                                                placeholder="Favorites" required>
+                                                placeholder="e.g. Summer Trip">
                                         </div>
                                     </div>
+
 
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-danger">Add</button>
@@ -248,32 +243,9 @@
                                         });
 
                                         // Create new option
-                                        wishlistOptionsDiv.innerHTML += `
-                        <div class="form-check mt-2">
-                            <input class="form-check-input" type="radio" name="selectedWishlistId" value="new" id="create-new-radio">
-                            <label class="form-check-label" for="create-new-radio">Create New Wishlist</label>
-                        </div>
-                        <div id="newWishlistInput" class="mt-2" style="display: none;">
-                            <label for="wishlistName" class="form-label">New Wishlist Name</label>
-                            <input type="text" class="form-control" id="wishlistName" name="name" placeholder="Favorites">
-                        </div>
-                    `;
 
-                                        // Re-bind radio toggle logic
-                                        const newRadio = document.getElementById("create-new-radio");
-                                        const newInput = document.getElementById("newWishlistInput");
 
-                                        document.querySelectorAll('input[name="selectedWishlistId"]').forEach(r => {
-                                            r.addEventListener("change", () => {
-                                                if (newRadio.checked) {
-                                                    newInput.style.display = "block";
-                                                    document.getElementById("wishlistName").setAttribute("required", "required");
-                                                } else {
-                                                    newInput.style.display = "none";
-                                                    document.getElementById("wishlistName").removeAttribute("required");
-                                                }
-                                            });
-                                        });
+
 
                                     } else {
                                         // No wishlist exists — show input
@@ -298,22 +270,19 @@
                                 const listingId = form.action.split('/').pop();
 
                                 const selectedRadio = document.querySelector('input[name="selectedWishlistId"]:checked');
-                                const isNew = selectedRadio && selectedRadio.value === "new";
-                                const wishlistName = document.getElementById('wishlistName')?.value;
+                                const wishlistName = document.getElementById('wishlistName')?.value?.trim();
 
                                 let body = {};
-                                if (isNew) {
-                                    if (!wishlistName || wishlistName.trim() === "") {
-                                        alert("Please provide a name for the new wishlist.");
-                                        return;
-                                    }
+
+                                if (wishlistName) {
                                     body = { name: wishlistName };
                                 } else if (selectedRadio) {
                                     body = { wishlistId: selectedRadio.value };
                                 } else {
-                                    alert("Please select or create a wishlist.");
+                                    alert("Please select an existing wishlist or enter a name to create one.");
                                     return;
                                 }
+
 
                                 try {
                                     const res = await fetch(form.action, {
