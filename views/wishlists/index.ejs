@@ -95,10 +95,10 @@
 
                     const icon = btn.querySelector("i.fa-heart");
                     const listingId = btn.dataset.listingId;
-                    const isActive = icon.classList.contains("active");
+                    const isRedHeart = icon.classList.contains("fa-solid") && icon.classList.contains("active");
 
-                    if (isActive) {
-                        // REMOVE from wishlist
+                    if (isRedHeart) {
+                        // ✅ Remove from wishlist
                         try {
                             const res = await fetch(`/wishlist/remove/${listingId}`, {
                                 method: "POST",
@@ -111,6 +111,7 @@
                                 icon.classList.remove("fa-solid", "active");
                                 icon.classList.add("fa-regular");
 
+                                // Optional: Remove the listing card visually
                                 const wrapper = btn.closest(".position-relative");
                                 if (wrapper) {
                                     wrapper.classList.add("fade-out");
@@ -124,7 +125,7 @@
                             alert("Error removing from wishlist.");
                         }
                     } else {
-                        // ADD to wishlist (show modal)
+                        // ➕ Add to wishlist (show modal)
                         const modal = new bootstrap.Modal(document.getElementById('wishlistModal'));
                         document.getElementById('wishlistModal').setAttribute('data-listing-id', listingId);
                         modal.show();
