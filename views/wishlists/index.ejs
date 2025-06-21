@@ -25,6 +25,7 @@
                                                     class="fa-heart <%= listing.isWishlisted ? 'fa-solid active' : 'fa-regular' %>"></i>
                                             </button>
 
+
                                             <a href="/listings/<%= listing._id %>"
                                                 class="text-decoration-none text-dark">
                                                 <div class="card border-0 shadow-sm rounded" style="min-width: 300px;">
@@ -96,10 +97,10 @@
 
                     const icon = btn.querySelector("i.fa-heart");
                     const listingId = btn.dataset.listingId;
-                    const isWishlisted = icon.classList.contains("active");
+                    const isWishlisted = btn.dataset.isWishlisted === "true";
 
                     if (isWishlisted) {
-                        // REMOVE listing from wishlist
+                        // 🧹 Remove from wishlist
                         try {
                             const res = await fetch(`/wishlist/remove/${listingId}`, {
                                 method: "POST",
@@ -109,11 +110,12 @@
                             });
 
                             if (res.ok) {
-                                // Update heart icon
                                 icon.classList.remove("fa-solid", "active");
                                 icon.classList.add("fa-regular");
 
-                                // Remove card from DOM
+                                // Update data-attribute so future clicks trigger modal
+                                btn.dataset.isWishlisted = "false";
+
                                 const wrapper = btn.closest(".position-relative");
                                 if (wrapper) {
                                     wrapper.classList.add("fade-out");
@@ -127,7 +129,7 @@
                             alert("Error removing from wishlist.");
                         }
                     } else {
-                        // ADD to wishlist → open modal
+                        // ➕ Add to wishlist → show modal
                         const modal = new bootstrap.Modal(document.getElementById('wishlistModal'));
                         document.getElementById('wishlistModal').setAttribute('data-listing-id', listingId);
                         modal.show();
