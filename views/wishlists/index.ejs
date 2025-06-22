@@ -231,6 +231,8 @@
             border-radius: 1rem;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
             border: none;
+            padding: 1.5rem 2rem;
+            position: relative;
         }
 
         #settingsModal .modal-header {
@@ -238,8 +240,10 @@
         }
 
         #settingsModal .modal-title {
-            font-weight: 600;
-            font-size: 1.2rem;
+            font-weight: bold;
+            font-size: 1.25rem;
+            margin-bottom: 1.2rem;
+            margin-top: 0.25rem;
         }
 
         #settingsModal .modal-body {
@@ -273,10 +277,16 @@
         }
 
         #settingsModal .btn-close {
-            background-color: transparent;
-            border: none;
-            font-size: 1.2rem;
-            color: #555;
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 0.9rem;
+            background: transparent;
+            opacity: 0.7;
+        }
+
+        #settingsModal .btn-close:hover {
+            opacity: 1;
         }
     </style>
 
