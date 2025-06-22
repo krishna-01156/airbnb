@@ -94,10 +94,12 @@
 
                     const icon = btn.querySelector("i.fa-heart");
                     const listingId = btn.dataset.listingId;
+
+                    // 🔥 THIS LINE IS THE FIX
                     const isWishlisted = icon.classList.contains("active");
 
                     if (isWishlisted) {
-                        // REMOVE from wishlist
+                        // 🧹 Remove from wishlist
                         try {
                             const res = await fetch(`/wishlist/remove/${listingId}`, {
                                 method: "POST",
@@ -123,7 +125,7 @@
                             alert("Error removing from wishlist.");
                         }
                     } else {
-                        // ADD to wishlist → show modal
+                        // ➕ Add to wishlist → show modal
                         const modal = new bootstrap.Modal(document.getElementById('wishlistModal'));
                         document.getElementById('wishlistModal').setAttribute('data-listing-id', listingId);
                         modal.show();
