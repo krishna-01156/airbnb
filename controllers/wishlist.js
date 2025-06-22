@@ -1,5 +1,5 @@
 const Wishlist = require('../models/wishlist.js');
-const Listing=require('../models/listing.js');
+const Listing = require('../models/listing.js');
 
 module.exports.addToWishlist = async (req, res) => {
     try {
@@ -53,7 +53,6 @@ module.exports.addToWishlist = async (req, res) => {
     }
 };
 
-
 module.exports.getUserWishlists = async (req, res) => {
     try {
         const wishlists = await Wishlist.find({ user: req.user._id });
@@ -64,20 +63,36 @@ module.exports.getUserWishlists = async (req, res) => {
     }
 };
 
-
 module.exports.viewWishlists = async (req, res) => {
-    const wishlists = await Wishlist.find({ user: req.user._id }).populate("listings");
-    res.render("wishlists/index", { wishlists });
+    try {
+        const wishlists = await Wishlist.find({ user: req.user._id }).populate("listings");
+        // Manually flag listings as wishlisted for view logic
+        for (let wishlist of wishlists) {
+            for (let listing of wishlist.listings) {
+                listing.isWishlisted = true;
+            }
+        }
+        res.render("wishlists/index", { wishlists });
+    } catch (err) {
+        console.error("Error rendering wishlists:", err);
+        req.flash("error", "Something went wrong loading wishlists.");
+        res.redirect("/listings");
+    }
 };
 
 module.exports.removeFromWishlist = async (req, res) => {
-    const userId = req.user._id;
-    const listingId = req.params.listingId;
+    try {
+        const userId = req.user._id;
+        const listingId = req.params.listingId;
 
-    await Wishlist.updateMany(
-        { user: userId },
-        { $pull: { listings: listingId } }
-    );
+        await Wishlist.updateMany(
+            { user: userId },
+            { $pull: { listings: listingId } }
+        );
 
-    res.status(200).json({ success: true });
+        return res.status(200).json({ success: true });
+    } catch (err) {
+        console.error("Error removing from wishlist:", err);
+        return res.status(500).json({ error: "Failed to remove from wishlist" });
+    }
 };
