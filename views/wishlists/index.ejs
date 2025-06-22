@@ -7,19 +7,23 @@
             <p>You have no wishlists yet.</p>
             <% } else { %>
                 <% wishlists.forEach(wishlist=> { %>
-                    <div class="mb-5">
+                    <div class="mb-5 position-relative">
+
+                        <!-- Settings panel -->
                         <div
-                            class="settings-panel d-none position-absolute top-0 start-0 w-100 h-100 rounded shadow-sm">
+                            class="settings-panel d-none position-absolute top-0 start-0 w-100 h-100 rounded shadow-sm bg-white">
                             <!-- Close (X) Button -->
                             <button type="button"
-                                class="close-panel btn btn-sm position-absolute top-0 start-0 m-2 fs-5">&times;</button>
+                                class="close-panel btn btn-sm position-absolute top-0 start-0 m-2 fs-5">
+                                &times;
+                            </button>
 
                             <!-- Settings Heading -->
                             <div class="text-center mt-4 mb-3">
                                 <strong class="text-secondary" style="font-size: 1rem;">Settings</strong>
                             </div>
 
-                            <!-- Options -->
+                            <!-- Rename/Delete Options -->
                             <div class="list-group w-100 px-4">
                                 <button class="list-group-item list-group-item-action rename-btn text-start"
                                     data-wishlist-id="<%= wishlist._id %>" data-wishlist-name="<%= wishlist.name %>">
@@ -33,6 +37,19 @@
                             </div>
                         </div>
 
+                        <!-- Wishlist name and 3-dot button -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="fw-semibold m-0" data-wishlist-id="<%= wishlist._id %>">
+                                <%= wishlist.name %>
+                            </h4>
+                            <div class="dropdown">
+                                <button class="btn wishlist-dropdown-btn" type="button" aria-expanded="false">
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Listings -->
                         <% if (wishlist.listings.length===0) { %>
                             <p class="text-muted">No listings in this wishlist.</p>
                             <% } else { %>
@@ -71,6 +88,7 @@
                         <% } %>
     </div>
 
+
     <style>
         .settings-panel {
             background-color: #fff;
@@ -84,6 +102,17 @@
             justify-content: flex-start;
         }
 
+        .settings-panel.showing-card {
+            background-color: #ffffff;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        }
+
+        .settings-panel .text-center strong {
+            font-weight: 600;
+            color: #444;
+            font-size: 1.05rem;
+        }
+
         .settings-panel .list-group-item {
             border: none;
             font-size: 0.95rem;
@@ -94,6 +123,12 @@
             background: transparent;
             border: none;
             font-weight: bold;
+        }
+
+        .settings-panel hr.my-0 {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 0.25rem 0;
         }
 
         .wishlist-btn {
