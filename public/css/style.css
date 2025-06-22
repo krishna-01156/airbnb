@@ -82,23 +82,25 @@ body{
     border: none;
     padding: 0;
     cursor: pointer;
+    z-index: 2;
 }
 
 .wishlist-btn i.fa-heart {
-    font-size: 1.5rem;
-    color: transparent;
-    -webkit-text-stroke: 1px black;
+    font-size: 1.8rem;
+    color: transparent; /* transparent fill */
+    -webkit-text-stroke: 1.5px white; /* clean white border */
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .wishlist-btn i.fa-heart.active {
-    color: #fe424d; /* Airbnb red */
-    -webkit-text-stroke: 1px white;
+    color: #fe424d; /* Airbnb red fill */
+    -webkit-text-stroke: 1.5px white; /* white border remains */
 }
 
 .wishlist-btn i.fa-heart:hover {
     transform: scale(1.2);
 }
+
 
 
 /*New listing*/
