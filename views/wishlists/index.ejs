@@ -7,44 +7,32 @@
             <p>You have no wishlists yet.</p>
             <% } else { %>
                 <% wishlists.forEach(wishlist=> { %>
-                    <div class="mb-5 position-relative">
+                    <div class="mb-5">
 
-                        <!-- ✅ Settings panel (initially hidden) -->
-                        <div
-                            class="settings-panel d-none position-absolute top-0 start-0 w-100 h-100 rounded shadow-sm bg-white">
-                            <!-- Close (X) Button -->
-                            <button type="button"
-                                class="close-panel btn btn-sm position-absolute top-0 start-0 m-2 fs-5">
-                                &times;
-                            </button>
-
-                            <!-- Settings Heading -->
-                            <div class="text-center mt-4 mb-3">
-                                <strong class="text-secondary" style="font-size: 1rem;">Settings</strong>
-                            </div>
-
-                            <!-- Rename/Delete Options -->
-                            <div class="list-group w-100 px-4">
-                                <button class="list-group-item list-group-item-action rename-btn text-start"
-                                    data-wishlist-id="<%= wishlist._id %>" data-wishlist-name="<%= wishlist.name %>">
-                                    Rename
-                                </button>
-                                <hr class="my-0">
-                                <button class="list-group-item list-group-item-action text-danger delete-btn text-start"
-                                    data-wishlist-id="<%= wishlist._id %>">
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- ✅ Wishlist Name + 3-dot Button -->
-                        <div class="d-flex justify-content-between align-items-center mb-3">
+                        <!-- ✅ Wishlist Name + 3-dot Button (with relative wrapper) -->
+                        <div class="d-flex justify-content-between align-items-center mb-3 position-relative">
                             <h4 class="fw-semibold m-0" data-wishlist-id="<%= wishlist._id %>">
                                 <%= wishlist.name %>
                             </h4>
                             <button class="wishlist-dropdown-btn" type="button">
                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                             </button>
+
+                            <!-- ✅ Settings panel as dropdown (NOT full overlay) -->
+                            <div
+                                class="settings-panel d-none position-absolute end-0 top-100 mt-2 bg-white shadow p-3 rounded z-3">
+                                <button type="button" class="close-panel btn-close btn-sm mb-2"
+                                    aria-label="Close"></button>
+
+                                <button class="list-group-item list-group-item-action rename-btn text-start mb-2"
+                                    data-wishlist-id="<%= wishlist._id %>" data-wishlist-name="<%= wishlist.name %>">
+                                    Rename
+                                </button>
+                                <button class="list-group-item list-group-item-action text-danger delete-btn text-start"
+                                    data-wishlist-id="<%= wishlist._id %>">
+                                    Delete
+                                </button>
+                            </div>
                         </div>
 
                         <!-- ✅ Wishlist Listings -->
@@ -90,47 +78,42 @@
 
     <style>
         .settings-panel {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            min-width: 160px;
             background-color: #fff;
-            z-index: 20;
-            padding-top: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            display: flex;
+            z-index: 100;
+            border-radius: 0.75rem;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            display: none;
             flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
+            padding: 0.5rem 0;
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        .settings-panel.showing-card {
-            background-color: #ffffff;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        .settings-panel.show {
+            display: flex;
         }
 
-        .settings-panel .text-center strong {
-            font-weight: 600;
-            color: #444;
-            font-size: 1.05rem;
-        }
-
-        .settings-panel .list-group-item {
-            border: none;
+        .settings-panel .btn {
             font-size: 0.95rem;
-            padding: 0.75rem 1.25rem;
+            padding: 0.5rem 1rem;
+            text-align: left;
+            width: 100%;
+            background: none;
+            border: none;
+            color: #333;
+            transition: background-color 0.2s ease;
         }
 
-        .settings-panel .close-panel {
-            background: transparent;
-            border: none;
-            font-weight: bold;
-            font-size: 1.25rem;
-            color: #555;
+        .settings-panel .btn:hover {
+            background-color: #f5f5f5;
         }
 
-        .settings-panel hr.my-0 {
-            border: none;
-            border-top: 1px solid #eee;
-            margin: 0.25rem 0;
+        .settings-panel .btn.text-danger:hover {
+            background-color: #ffeaea;
+            color: #d80000;
         }
 
         .wishlist-btn {
@@ -207,9 +190,8 @@
             border-radius: 0.75rem;
         }
 
-        /* --- Airbnb-style three-dot menu button --- */
         .wishlist-dropdown-btn {
-            position:relative;
+            position: relative;
             background-color: #f7f7f7;
             border: 1px solid #ddd;
             border-radius: 50%;
@@ -233,38 +215,7 @@
             font-size: 1.2rem;
             color: #222;
         }
-
-        /* --- Dropdown menu style (even if unused) --- */
-        .dropdown-menu {
-            border-radius: 0.75rem;
-            padding: 0.5rem 0;
-            font-family: "Segoe UI", sans-serif;
-            font-size: 0.95rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .dropdown-item {
-            padding: 0.6rem 1.25rem;
-            font-weight: 500;
-            color: #333;
-            transition: background-color 0.2s ease;
-        }
-
-        .dropdown-item i {
-            width: 18px;
-        }
-
-        .dropdown-item:hover {
-            background-color: #f5f5f5;
-            color: #000;
-        }
-
-        .dropdown-item.text-danger:hover {
-            background-color: #ffeaea;
-            color: #d80000;
-        }
     </style>
-
 
 
     <script>
@@ -284,9 +235,7 @@
                         try {
                             const res = await fetch(`/wishlist/remove/${listingId}`, {
                                 method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json"
-                                }
+                                headers: { "Content-Type": "application/json" }
                             });
 
                             if (res.ok) {
@@ -313,7 +262,7 @@
                 });
             });
 
-            // Handle Rename Button Click
+            // Rename logic
             document.querySelectorAll(".rename-btn").forEach(btn => {
                 btn.addEventListener("click", () => {
                     currentWishlistId = btn.dataset.wishlistId;
@@ -329,13 +278,12 @@
                 });
             });
 
-            document.getElementById("renameInput").addEventListener("input", e => {
+            document.getElementById("renameInput").addEventListener("input", (e) => {
                 const val = e.target.value;
                 document.getElementById("renameCharCount").textContent = val.length;
                 document.getElementById("renameConfirmBtn").disabled = val.trim() === "";
             });
 
-            // Handle Rename Confirm
             document.getElementById("renameConfirmBtn").addEventListener("click", async () => {
                 const newName = document.getElementById("renameInput").value.trim();
                 if (!newName) return;
@@ -343,22 +291,18 @@
                 try {
                     const res = await fetch(`/wishlist/rename/${currentWishlistId}`, {
                         method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+                        headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ name: newName })
                     });
 
                     if (res.ok) {
-                        const updatedTitle = document.querySelector(`[data-wishlist-id="${currentWishlistId}"]`)
-                            ?.closest(".d-flex")?.querySelector("h4");
+                        const updatedTitle = document.querySelector(`[data-wishlist-id="${currentWishlistId}"]`)?.closest(".d-flex")?.querySelector("h4");
                         if (updatedTitle) updatedTitle.textContent = newName;
 
                         const renameBtn = document.querySelector(`.rename-btn[data-wishlist-id="${currentWishlistId}"]`);
                         if (renameBtn) renameBtn.setAttribute("data-wishlist-name", newName);
 
-                        const modalInstance = bootstrap.Modal.getInstance(document.getElementById("renameModal"));
-                        modalInstance.hide();
+                        bootstrap.Modal.getInstance(document.getElementById("renameModal")).hide();
                     } else {
                         alert("Failed to rename wishlist");
                     }
@@ -367,7 +311,7 @@
                 }
             });
 
-            // Handle Delete Button Click
+            // Delete logic
             document.querySelectorAll(".delete-btn").forEach(btn => {
                 btn.addEventListener("click", () => {
                     currentWishlistId = btn.dataset.wishlistId;
@@ -379,7 +323,6 @@
                 });
             });
 
-            // ✅ Fix: Use POST instead of DELETE to match your controller
             document.getElementById("deleteConfirmBtn").addEventListener("click", async () => {
                 try {
                     const res = await fetch(`/wishlist/delete/${currentWishlistId}`, {
@@ -393,8 +336,7 @@
                             setTimeout(() => wishlistDiv.remove(), 300);
                         }
 
-                        const modalInstance = bootstrap.Modal.getInstance(document.getElementById("deleteModal"));
-                        modalInstance.hide();
+                        bootstrap.Modal.getInstance(document.getElementById("deleteModal")).hide();
                     } else {
                         alert("Failed to delete wishlist");
                     }
@@ -403,32 +345,36 @@
                 }
             });
 
-            // 🔥 NEW: Show settings panel when 3-dot is clicked
+            // Settings panel toggle via 3-dot button
             document.querySelectorAll(".wishlist-dropdown-btn").forEach(btn => {
                 btn.addEventListener("click", (e) => {
                     e.stopPropagation();
 
-                    // Hide all other panels first
+                    // Hide all open settings panels
                     document.querySelectorAll(".settings-panel").forEach(panel => {
-                        panel.classList.add("d-none");
+                        panel.classList.remove("show");
                     });
 
-                    const card = btn.closest(".mb-5");
-                    const panel = card.querySelector(".settings-panel");
-                    if (panel) {
-                        panel.classList.remove("d-none");
-                    }
+                    const panel = btn.closest(".mb-5").querySelector(".settings-panel");
+                    if (panel) panel.classList.add("show");
                 });
             });
 
-            // 🔥 NEW: Hide settings panel when close (X) clicked
-            document.querySelectorAll(".close-panel").forEach(closeBtn => {
-                closeBtn.addEventListener("click", () => {
-                    const panel = closeBtn.closest(".settings-panel");
-                    if (panel) {
-                        panel.classList.add("d-none");
-                    }
+            // Close settings panel via close button
+            document.querySelectorAll(".close-panel").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const panel = btn.closest(".settings-panel");
+                    if (panel) panel.classList.remove("show");
                 });
+            });
+
+            // Optional: Close settings panel when clicking outside
+            document.addEventListener("click", (e) => {
+                if (!e.target.closest(".settings-panel") && !e.target.closest(".wishlist-dropdown-btn")) {
+                    document.querySelectorAll(".settings-panel").forEach(panel => {
+                        panel.classList.remove("show");
+                    });
+                }
             });
         });
     </script>
