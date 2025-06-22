@@ -207,18 +207,18 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            let currentWishlistId = null;
+
+            // Handle heart icon click
             document.querySelectorAll(".wishlist-btn").forEach(btn => {
                 btn.addEventListener("click", async (e) => {
                     e.preventDefault();
 
                     const icon = btn.querySelector("i.fa-heart");
                     const listingId = btn.dataset.listingId;
-
-                    // 🔥 THIS LINE IS THE FIX
                     const isWishlisted = icon.classList.contains("active");
 
                     if (isWishlisted) {
-                        // 🧹 Remove from wishlist
                         try {
                             const res = await fetch(`/wishlist/remove/${listingId}`, {
                                 method: "POST",
@@ -244,18 +244,12 @@
                             alert("Error removing from wishlist.");
                         }
                     } else {
-                        // ➕ Add to wishlist → show modal
                         const modal = new bootstrap.Modal(document.getElementById('wishlistModal'));
                         document.getElementById('wishlistModal').setAttribute('data-listing-id', listingId);
                         modal.show();
                     }
                 });
             });
-        });
-
-
-        document.addEventListener("DOMContentLoaded", () => {
-            let currentWishlistId = null;
 
             // Handle Rename Button Click
             document.querySelectorAll(".rename-btn").forEach(btn => {
@@ -266,7 +260,6 @@
                     const input = document.getElementById("renameInput");
                     input.value = name;
                     document.getElementById("renameCharCount").textContent = name.length;
-
                     document.getElementById("renameConfirmBtn").disabled = name.trim() === "";
 
                     const renameModal = new bootstrap.Modal(document.getElementById("renameModal"));
@@ -274,7 +267,6 @@
                 });
             });
 
-            // Rename character counter and enable Save button
             document.getElementById("renameInput").addEventListener("input", e => {
                 const val = e.target.value;
                 document.getElementById("renameCharCount").textContent = val.length;
@@ -295,8 +287,19 @@
                         body: JSON.stringify({ name: newName })
                     });
 
-                    if (res.ok) window.location.reload();
-                    else alert("Failed to rename wishlist");
+                    if (res.ok) {
+                        const updatedTitle = document.querySelector(`[data-wishlist-id="${currentWishlistId}"]`)
+                            ?.closest(".d-flex")?.querySelector("h4");
+                        if (updatedTitle) updatedTitle.textContent = newName;
+
+                        const renameBtn = document.querySelector(`.rename-btn[data-wishlist-id="${currentWishlistId}"]`);
+                        if (renameBtn) renameBtn.setAttribute("data-wishlist-name", newName);
+
+                        const modalInstance = bootstrap.Modal.getInstance(document.getElementById("renameModal"));
+                        modalInstance.hide();
+                    } else {
+                        alert("Failed to rename wishlist");
+                    }
                 } catch (err) {
                     console.error("Rename error:", err);
                 }
@@ -314,23 +317,33 @@
                 });
             });
 
-            // Handle Delete Confirm
+            // ✅ Fix: Use POST instead of DELETE to match your controller
             document.getElementById("deleteConfirmBtn").addEventListener("click", async () => {
                 try {
                     const res = await fetch(`/wishlist/delete/${currentWishlistId}`, {
-                        method: "DELETE"
+                        method: "POST"
                     });
 
-                    if (res.ok) window.location.reload();
-                    else alert("Failed to delete wishlist");
+                    if (res.ok) {
+                        const wishlistDiv = document.querySelector(`[data-wishlist-id="${currentWishlistId}"]`)?.closest(".mb-5");
+                        if (wishlistDiv) {
+                            wishlistDiv.classList.add("fade-out");
+                            setTimeout(() => wishlistDiv.remove(), 300);
+                        }
+
+                        const modalInstance = bootstrap.Modal.getInstance(document.getElementById("deleteModal"));
+                        modalInstance.hide();
+                    } else {
+                        alert("Failed to delete wishlist");
+                    }
                 } catch (err) {
                     console.error("Delete error:", err);
                 }
             });
         });
-
-
     </script>
+
+
 
     <!-- Rename Wishlist Modal -->
     <div class="modal fade" id="renameModal" tabindex="-1">

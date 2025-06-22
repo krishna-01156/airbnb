@@ -99,9 +99,20 @@ module.exports.removeFromWishlist = async (req, res) => {
 
 module.exports.renameWishlist = async (req, res) => {
     const { id } = req.params;
-    const { newName } = req.body;
-    await Wishlist.findOneAndUpdate({ _id: id, user: req.user._id }, { name: newName });
-    res.status(200).json({ success: true });
+    const { name } = req.body;
+
+    try {
+        const wishlist = await Wishlist.findOne({ _id: id, user: req.user._id });
+        if (!wishlist) return res.status(404).json({ error: "Wishlist not found" });
+
+        wishlist.name = name;
+        await wishlist.save();
+
+        return res.status(200).json({ success: true, newName: name });
+    } catch (err) {
+        console.error("Rename error:", err);
+        return res.status(500).json({ error: "Failed to rename wishlist" });
+    }
 };
 
 module.exports.deleteWishlist = async (req, res) => {
@@ -109,3 +120,4 @@ module.exports.deleteWishlist = async (req, res) => {
     await Wishlist.findOneAndDelete({ _id: id, user: req.user._id });
     res.status(200).json({ success: true });
 };
+
