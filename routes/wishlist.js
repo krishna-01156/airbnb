@@ -19,4 +19,8 @@ router.post("/add/:listingId", isLoggedIn, wishlistController.addToWishlist);
 // Remove a listing from a wishlist
 router.post("/remove/:listingId", isLoggedIn, wishlistController.removeFromWishlist);
 
+router.post("/rename/:id", isLoggedIn, wishlistController.renameWishlist);
+router.post("/delete/:id", isLoggedIn, wishlistController.deleteWishlist);
+
+
 module.exports = router;

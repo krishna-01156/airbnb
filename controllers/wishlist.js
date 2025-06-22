@@ -96,3 +96,16 @@ module.exports.removeFromWishlist = async (req, res) => {
         return res.status(500).json({ error: "Failed to remove from wishlist" });
     }
 };
+
+module.exports.renameWishlist = async (req, res) => {
+    const { id } = req.params;
+    const { newName } = req.body;
+    await Wishlist.findOneAndUpdate({ _id: id, user: req.user._id }, { name: newName });
+    res.status(200).json({ success: true });
+};
+
+module.exports.deleteWishlist = async (req, res) => {
+    const { id } = req.params;
+    await Wishlist.findOneAndDelete({ _id: id, user: req.user._id });
+    res.status(200).json({ success: true });
+};
