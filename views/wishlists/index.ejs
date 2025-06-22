@@ -13,7 +13,7 @@
                                 <%= wishlist.name %>
                             </h4>
                             <div class="dropdown">
-                                <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown"
+                                <button class="btn wishlist-dropdown-btn" type="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">
                                     <i class="fa-solid fa-ellipsis"></i>
                                 </button>
@@ -33,6 +33,7 @@
                                 </ul>
                             </div>
                         </div>
+
 
 
                         <% if (wishlist.listings.length===0) { %>
@@ -152,7 +153,32 @@
         .modal .btn-light {
             border-radius: 0.75rem;
         }
+
+        /* --- Airbnb-style three-dot button --- */
+        .wishlist-dropdown-btn {
+            background-color: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            transition: background-color 0.2s ease;
+        }
+
+        .wishlist-dropdown-btn:hover {
+            background-color: #e6e6e6;
+        }
+
+        .wishlist-dropdown-btn i {
+            font-size: 1.2rem;
+            color: #222;
+        }
     </style>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
