@@ -77,29 +77,32 @@ body{
     opacity: 0.2;
 }
 /*wishlist heart*/
+/* Heart button wrapper */
 .wishlist-btn {
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
     z-index: 2;
+    font-size: 1.8rem;
 }
 
-.wishlist-btn i.fa-heart {
-    font-size: 1.8rem;
-    color: transparent; /* transparent fill */
-    -webkit-text-stroke: 1.5px white; /* clean white border */
+/* Default inactive heart (white border, no fill) */
+.wishlist-btn i.fa-regular.fa-heart {
+    color: white;
+}
+
+/* Active red heart (Airbnb style) */
+.wishlist-btn i.fa-solid.fa-heart.active {
+    color: #fe424d;
+}
+
+/* Hover effect */
+.wishlist-btn i.fa-heart:hover {
+    transform: scale(1.2);
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.wishlist-btn i.fa-heart.active {
-    color: #fe424d; /* Airbnb red fill */
-    -webkit-text-stroke: 1.5px white; /* white border remains */
-}
-
-.wishlist-btn i.fa-heart:hover {
-    transform: scale(1.2);
-}
 
 
 
