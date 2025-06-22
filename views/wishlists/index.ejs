@@ -93,7 +93,7 @@
         }
 
         .settings-panel.show {
-            display: flex;
+            display: flex !important;
         }
 
         .settings-panel .btn {
@@ -378,3 +378,47 @@
             });
         });
     </script>
+
+    <!-- Rename Wishlist Modal -->
+    <div class="modal fade" id="renameModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3 rounded-4 shadow">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Rename wishlist</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label small text-muted mb-1">Name</label>
+                    <div class="input-group">
+                        <input type="text" id="renameInput" class="form-control rounded-pill" maxlength="50">
+                        <button type="button" class="btn btn-light rounded-pill ms-2 px-3 py-1"
+                            onclick="document.getElementById('renameInput').value='';">✕</button>
+                    </div>
+                    <small class="text-muted mt-1 d-block"><span id="renameCharCount">0</span>/50 characters</small>
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-between">
+                    <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-dark" id="renameConfirmBtn" disabled>Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Wishlist Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 rounded-4 shadow">
+                <div class="modal-body text-center">
+                    <h5 class="fw-bold mb-3">Delete this wishlist?</h5>
+                    <p class="text-muted">
+                        “<span id="deleteWishlistName">wishlist</span>” will also be permanently deleted for everyone
+                        you’ve shared it with.
+                    </p>
+                    <div class="d-flex justify-content-between mt-4">
+                        <button class="btn btn-light w-50 me-2" data-bs-dismiss="modal">Cancel</button>
+                        <button class="btn btn-dark w-50" id="deleteConfirmBtn">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
