@@ -19,12 +19,10 @@
                                     <% wishlist.listings.forEach(listing=> { %>
                                         <div class="position-relative">
                                             <button class="wishlist-btn btn position-absolute top-0 end-0 m-2"
-                                                data-listing-id="<%= listing._id %>"
-                                                data-is-wishlisted="<%= listing.isWishlisted %>">
+                                                data-listing-id="<%= listing._id %>">
                                                 <i
                                                     class="fa-heart <%= listing.isWishlisted ? 'fa-solid active' : 'fa-regular' %>"></i>
                                             </button>
-
 
                                             <a href="/listings/<%= listing._id %>"
                                                 class="text-decoration-none text-dark">
@@ -70,7 +68,6 @@
 
         .wishlist-btn i.fa-heart.active {
             color: #fe424d;
-            /* Airbnb red */
             -webkit-text-stroke: 1.5px white;
         }
 
@@ -97,10 +94,10 @@
 
                     const icon = btn.querySelector("i.fa-heart");
                     const listingId = btn.dataset.listingId;
-                    const isWishlisted = btn.dataset.isWishlisted === "true";
+                    const isWishlisted = icon.classList.contains("active");
 
                     if (isWishlisted) {
-                        // 🧹 Remove from wishlist
+                        // REMOVE from wishlist
                         try {
                             const res = await fetch(`/wishlist/remove/${listingId}`, {
                                 method: "POST",
@@ -112,9 +109,6 @@
                             if (res.ok) {
                                 icon.classList.remove("fa-solid", "active");
                                 icon.classList.add("fa-regular");
-
-                                // Update data-attribute so future clicks trigger modal
-                                btn.dataset.isWishlisted = "false";
 
                                 const wrapper = btn.closest(".position-relative");
                                 if (wrapper) {
@@ -129,7 +123,7 @@
                             alert("Error removing from wishlist.");
                         }
                     } else {
-                        // ➕ Add to wishlist → show modal
+                        // ADD to wishlist → show modal
                         const modal = new bootstrap.Modal(document.getElementById('wishlistModal'));
                         document.getElementById('wishlistModal').setAttribute('data-listing-id', listingId);
                         modal.show();
