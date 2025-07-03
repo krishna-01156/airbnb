@@ -54,63 +54,36 @@
                 cursor: pointer;
             }
         </style>
-        <div id="filters">
-            <div class="filter">
-                <div><i class="fa-solid fa-fire"></i></div>
-                <p>Trending</p>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-bed"></i></div>
-                <p>Rooms</p>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-mountain-city"></i></div>
-                <p>Iconic Cities</p>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-mountain"></i></div>
-                <p>Mountains</p>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-water-ladder"></i></div>
-                <p>Amazing Pool</p>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-umbrella-beach"></i></div>
-                <p>Beach</p>
-            </div>
-            <div class="filter">
-                <div><i class="fa-brands fa-fort-awesome"></i></div>
-                <p>Castles</p>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-campground"></i></div>
-                <p>Camping</p>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-tractor"></i></div>
-                <p>Farms</p>
-            </div>
-            <div class="filter">
-                <div><i class="fa-regular fa-snowflake"></i></div>
-                <p>Arctic</p>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-landmark-dome"></i></div>
-                <p>Domes</p>
-            </div>
-            <div class="filter">
-                <div><i class="fa-solid fa-ship"></i></div>
-                <p>Boats</p>
-            </div>
+        <div id="filters" class="d-flex flex-wrap gap-3 my-4">
+            <% const categories=[ { name: "Trending Rooms" , icon: "fa-fire" }, { name: "Iconic Cities" ,
+                icon: "fa-mountain-city" }, { name: "Mountains" , icon: "fa-mountain" }, { name: "Amazon" ,
+                icon: "fa-tree" }, { name: "Amazing Pool" , icon: "fa-water-ladder" }, { name: "Beaches" ,
+                icon: "fa-umbrella-beach" }, { name: "Castles" , icon: "fa-fort-awesome" }, { name: "Camping" ,
+                icon: "fa-campground" }, { name: "Farms" , icon: "fa-tractor" }, { name: "Arctic" , icon: "fa-snowflake"
+                }, { name: "Dome" , icon: "fa-landmark-dome" }, { name: "Boats" , icon: "fa-ship" } ]; %>
 
-            <div class="tax-toggle">
-                <div class="form-check-reverse form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-                    <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
-                </div>
-            </div>
+                <% categories.forEach(cat=> {
+                    const isActive = category === cat.name;
+                    %>
+                    <a href="/listings?category=<%= encodeURIComponent(cat.name) %>" class="filter d-flex flex-column align-items-center justify-content-center 
+                  px-3 py-2 rounded text-decoration-none 
+                  <%= isActive ? 'bg-dark text-white' : 'bg-light text-dark' %>">
+                        <div><i class="fa-solid <%= cat.icon %> fa-lg"></i></div>
+                        <p class="m-0 text-center" style="font-size: 0.9rem;">
+                            <%= cat.name %>
+                        </p>
+                    </a>
+                    <% }); %>
+
+                        <div class="tax-toggle ms-auto">
+                            <div class="form-check-reverse form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                                <label class="form-check-label" for="switchCheckDefault">Display total after
+                                    taxes</label>
+                            </div>
+                        </div>
         </div>
+
         <% if (listings.length===0) { %>
             <div class="container mt-4">
                 <h4>No listings found for "<%= searchTerm %>"</h4>
