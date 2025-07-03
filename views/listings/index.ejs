@@ -28,9 +28,7 @@
 
             .filter i {
                 font-size: 1rem;
-                /* smaller icon */
                 color: #444;
-                /* normal icon color */
             }
 
             .filter p {
@@ -46,15 +44,26 @@
             }
 
             .tax-toggle {
-                margin-left: auto;
+                border: 1px solid #ccc;
+                border-radius: 2rem;
+                padding: 0.6rem 1.2rem;
                 display: flex;
                 align-items: center;
-                font-size: 0.9rem;
-                padding-left: 2rem;
+                background-color: #fff;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                margin-left: auto;
+                white-space: nowrap;
+                height: auto;
             }
 
             .tax-info {
                 display: none;
+            }
+
+            .tax-toggle label {
+                margin-bottom: 0;
+                margin-left: 0.5rem;
+                font-size: 0.9rem;
             }
 
             .wishlist-btn {
