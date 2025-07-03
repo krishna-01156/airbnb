@@ -7,14 +7,18 @@
                 flex-wrap: nowrap;
                 overflow-x: auto;
                 align-items: center;
-                padding: 1rem 0;
+                padding: 1rem 1.5rem;
+                gap: 2rem;
+                border-bottom: 1px solid #ccc;
+                white-space: nowrap;
             }
 
             .filter {
-                margin-right: 2rem;
                 text-align: center;
-                opacity: 0.7;
-                white-space: nowrap;
+                opacity: 0.75;
+                transition: opacity 0.2s ease;
+                min-width: 70px;
+                flex-shrink: 0;
             }
 
             .filter:hover {
@@ -23,22 +27,38 @@
             }
 
             .filter p {
-                font-size: 0.85rem;
-                margin: 0.2rem 0 0;
+                font-size: 0.75rem;
+                margin: 0.3rem 0 0;
+            }
+
+            .filter i {
+                font-size: 1.2rem;
+            }
+
+            .filter-link {
+                text-decoration: none;
+                color: inherit;
+                padding: 0.5rem 0.7rem;
+                border-radius: 8px;
+            }
+
+            .filter-link.active {
+                font-weight: bold;
+                color: black;
+                opacity: 1;
+                border-bottom: 2px solid black;
+            }
+
+            .tax-toggle {
+                margin-left: auto;
+                display: flex;
+                align-items: center;
+                font-size: 0.9rem;
+                padding-left: 2rem;
             }
 
             .tax-info {
                 display: none;
-            }
-
-            .tax-toggle {
-                border: 1px solid black;
-                border-radius: 1rem;
-                height: 3rem;
-                padding: 1rem;
-                display: flex;
-                align-items: center;
-                margin-left: auto;
             }
 
             .wishlist-btn {
@@ -56,27 +76,10 @@
                 color: #fe424d;
                 cursor: pointer;
             }
-
-            .filter i {
-                font-size: 1.2rem;
-            }
-
-            /* Remove all background & border */
-            .filter-link {
-                text-decoration: none;
-                color: inherit;
-                padding: 0.5rem 0.7rem;
-                border-radius: 8px;
-            }
-
-            .filter-link.active {
-                font-weight: bold;
-                color: black;
-                opacity: 1;
-            }
         </style>
 
-        <div id="filters" class="px-4">
+
+        <div id="filters">
             <% const categories=[ { name: "Trending Rooms" , icon: "fa-fire" }, { name: "Iconic Cities" ,
                 icon: "fa-mountain-city" }, { name: "Mountains" , icon: "fa-mountain" }, { name: "Amazon" ,
                 icon: "fa-tree" }, { name: "Amazing Pool" , icon: "fa-water-ladder" }, { name: "Beaches" ,
@@ -88,7 +91,7 @@
                     const isActive = category === cat.name;
                     %>
                     <a href="/listings?category=<%= encodeURIComponent(cat.name) %>"
-                        class="filter filter-link <%= isActive ? 'active' : '' %>">
+                        class="filter <%= isActive ? 'active' : '' %>">
                         <div><i class="fa-solid <%= cat.icon %>"></i></div>
                         <p>
                             <%= cat.name %>
@@ -97,7 +100,7 @@
                     <% }); %>
 
                         <div class="tax-toggle">
-                            <div class="form-check-reverse form-switch">
+                            <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
                                 <label class="form-check-label" for="switchCheckDefault">Display total after
                                     taxes</label>
