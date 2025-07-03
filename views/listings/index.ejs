@@ -5,20 +5,20 @@
             #filters {
                 display: flex;
                 flex-wrap: nowrap;
-                overflow-x: auto;
                 align-items: center;
-                padding: 1rem 1.5rem;
                 gap: 2rem;
-                border-bottom: 1px solid #ccc;
-                white-space: nowrap;
+                padding: 1rem 0;
+                overflow-x: hidden;
+                border-bottom: 1px solid #ddd;
             }
 
             .filter {
                 text-align: center;
                 opacity: 0.75;
                 transition: opacity 0.2s ease;
-                min-width: 70px;
                 flex-shrink: 0;
+                text-decoration: none;
+                color: inherit;
             }
 
             .filter:hover {
@@ -26,27 +26,23 @@
                 cursor: pointer;
             }
 
+            .filter i {
+                font-size: 1rem;
+                /* smaller icon */
+                color: #444;
+                /* normal icon color */
+            }
+
             .filter p {
                 font-size: 0.75rem;
                 margin: 0.3rem 0 0;
+                color: #444;
             }
 
-            .filter i {
-                font-size: 1.2rem;
-            }
-
-            .filter-link {
-                text-decoration: none;
-                color: inherit;
-                padding: 0.5rem 0.7rem;
-                border-radius: 8px;
-            }
-
-            .filter-link.active {
+            .filter.active i,
+            .filter.active p {
                 font-weight: bold;
-                color: black;
-                opacity: 1;
-                border-bottom: 2px solid black;
+                color: #000;
             }
 
             .tax-toggle {
@@ -77,6 +73,7 @@
                 cursor: pointer;
             }
         </style>
+
 
 
         <div id="filters">
