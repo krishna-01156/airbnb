@@ -1,34 +1,21 @@
-const Wishlist = require("../models/wishlist");
-const Listing = require("../models/listing.js");
-const User = require("../models/user.js");
+const Review = require("../models/review");
+const Listing = require("../models/listing");
 
-module.exports.addToWishlist = async (req, res) => {
-    const { listingId } = req.params;
-    const { name } = req.body;
-    const userId = req.user._id;
-
-    const listing = await Listing.findById(listingId);
-    if (!listing) {
-        req.flash("error", "Listing not found");
-        return res.redirect("/listings");
-    }
-
-    let wishlist = await Wishlist.findOne({ user: userId, name });
-
-    if (!wishlist) {
-        wishlist = new Wishlist({ name, user: userId, listings: [listingId] });
-    } else {
-        if (!wishlist.listings.includes(listingId)) {
-            wishlist.listings.push(listingId);
-        }
-    }
-
-    await wishlist.save();
-    req.flash("success", "Listing added to wishlist");
-    res.redirect("/listings");
+module.exports.createReview = async (req, res) => {
+    const listing = await Listing.findById(req.params.id);
+    const review = new Review(req.body.review);
+    review.author = req.user._id;
+    listing.reviews.push(review);
+    await review.save();
+    await listing.save();
+    req.flash("success", "Review added successfully!");
+    res.redirect(`/listings/${listing._id}`);
 };
 
-module.exports.viewWishlists = async (req, res) => {
-    const wishlists = await Wishlist.find({ user: req.user._id }).populate("listings");
-    res.render("wishlists/index", { wishlists });
+module.exports.destroyReview = async (req, res) => {
+    const { id, reviewId } = req.params;
+    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    req.flash("success", "Review deleted successfully!");
+    res.redirect(`/listings/${id}`);
 };
