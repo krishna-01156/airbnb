@@ -45,7 +45,7 @@
                     <% if(currentUser) {%>
                         <hr>
                         <h4>Leave a Review</h4>
-                        <form action="/listings/<%= listing.id %>/reviews" method="POST" novalidate
+                        <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate
                             class="needs-validation">
 
                             <div class="mb-3 mt-3">
