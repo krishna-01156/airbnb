@@ -1,15 +1,23 @@
 <% layout("/layouts/boilerplate") -%>
-    <% let searchTerm=typeof location !=="undefined" ? location : "" ; %>
 
         <style>
+            .card-text {
+                font-size: clamp(0.85rem, 2.5vw, 1rem);
+                line-height: 1.4;
+            }
+
             #filters {
                 display: flex;
                 flex-wrap: nowrap;
                 align-items: center;
-                gap: 2rem;
+                gap: 1.5rem;
                 padding: 1rem 0;
-                overflow-x: hidden;
-                border-bottom: 1px solid #ddd;
+                overflow-x: auto;
+                scrollbar-width: none;
+            }
+
+            #filters::-webkit-scrollbar {
+                display: none;
             }
 
             .filter {
@@ -19,6 +27,8 @@
                 flex-shrink: 0;
                 text-decoration: none;
                 color: inherit;
+                min-width: 60px;
+                padding: 0.5rem 0;
             }
 
             .filter:hover {
@@ -58,6 +68,13 @@
 
             .tax-info {
                 display: none;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .tax-info.show {
+                display: inline;
+                opacity: 1;
             }
 
             .tax-toggle label {
@@ -77,9 +94,25 @@
                 z-index: 10;
             }
 
+            .wishlist-btn i {
+                text-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+            }
+
             .wishlist-btn:hover {
                 color: #fe424d;
                 cursor: pointer;
+            }
+
+            @media (max-width: 576px) {
+                .wishlist-btn {
+                    font-size: 1.1rem;
+                    top: 6px;
+                    right: 6px;
+                }
+
+                .modal-sm {
+                    max-width: 400px;
+                }
             }
         </style>
 
@@ -117,17 +150,20 @@
 
         <% if (listings.length===0) { %>
             <div class="container mt-4">
-                <h4>No listings found for "<%= searchTerm %>"</h4>
+                <h4>No listings found <%= searchTerm ? `for "${searchTerm}" ` : "" %>
+                
+                </h4>
             </div>
             <% } else { %>
 
-                <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+                <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 mt-3">
                     <% for(let listing of listings){ %>
                         <div class="col">
                             <div class="card listing-card position-relative">
                                 <a href="/listings/<%=listing._id%>">
-                                    <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image"
-                                        style="height: 20rem;">
+                                    <img src="<%= listing.image.url %>" class="card-img-top img-fluid"
+                                        alt="listing_image" style="object-fit: cover; height: 16rem;">
+
                                 </a>
 
                                 <!-- Wishlist Button -->
@@ -157,7 +193,7 @@
                     <!-- Wishlist Modal -->
                     <div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="wishlistModalLabel"
                         aria-hidden="true">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-dialog-centered modal-sm">
                             <form method="POST" id="wishlistForm">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -202,13 +238,23 @@
                             // 💡 Tax info toggle
                             const taxswitch = document.getElementById("switchCheckDefault");
                             if (taxswitch) {
-                                taxswitch.addEventListener("click", () => {
-                                    const taxinfo = document.getElementsByClassName("tax-info");
-                                    for (let info of taxinfo) {
-                                        info.style.display = (info.style.display !== "inline") ? "inline" : "none";
-                                    }
+                                // Restore saved state from localStorage
+                                const savedState = localStorage.getItem("showTaxes");
+                                if (savedState === "true") {
+                                    taxswitch.checked = true;
+                                    document.querySelectorAll(".tax-info").forEach(info => info.classList.add("show"));
+                                }
+
+                                // Update state on change
+                                taxswitch.addEventListener("change", () => {
+                                    const checked = taxswitch.checked;
+                                    document.querySelectorAll(".tax-info").forEach(info => {
+                                        info.classList.toggle("show", checked);
+                                    });
+                                    localStorage.setItem("showTaxes", checked);
                                 });
                             }
+
 
                             const wishlistModal = document.getElementById('wishlistModal');
                             const wishlistNameInput = document.getElementById("wishlistName");

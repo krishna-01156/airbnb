@@ -45,7 +45,8 @@ module.exports.index = async (req, res) => {
     res.render("listings/index", {
         listings: listingsWithStatus,
         userWishlists,
-        category: req.query.category || null
+        category: req.query.category || null,
+        searchTerm: req.query.location || "" 
     });
 };
 
@@ -60,7 +61,8 @@ module.exports.showListing = async (req, res) => {
         populate: {
             path: "author",
         }
-    }).populate("owner");
+    }).populate("owner")
+    .lean(); 
 
     if (!listing) {
         req.flash("error", "Listing you requested for does not exist!");
