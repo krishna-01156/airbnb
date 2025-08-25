@@ -19,7 +19,7 @@
                     <label for="category" class="form-label">Category</label>
                     <select name="listing[category]" class="form-select" required>
                         <option value="">Select a category</option>
-                        <% const categories=["Trending Rooms", "Iconic Cities" , "Mountains" , "Amazon" , "Amazing Pool"
+                        <% const categories=["Trending Rooms", "Iconic Cities" , "Mountains", "Amazing Pool"
                             , "Beaches" , "Castles" , "Camping" , "Farms" , "Arctic" , "Dome" , "Boats" ]; %>
                             <% categories.forEach(cat=> { %>
                                 <option value="<%= cat %>" <%=listing.category===cat ? 'selected' : '' %>><%= cat %>
