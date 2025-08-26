@@ -1,4 +1,8 @@
 <style>
+    .navbar-collapse {
+        justify-content: center;
+    }
+
     .search-btn {
         color: #fff;
         background-color: #ff385c;
@@ -84,7 +88,7 @@
         display: none !important;
     }
 
-    /* Slide down animation */
+
     @keyframes slideDown {
         from {
             opacity: 0;
@@ -97,8 +101,26 @@
         }
     }
 
-    /* Small screens */
+    @media (min-width: 768px) {
+        .navbar-collapse form {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+
     @media (max-width: 576px) {
+        body {
+            overflow-x: hidden;
+        }
+
+        .dropdown-menu-custom {
+            width: 100%;
+            max-width: 100vw;
+            border-radius: 0;
+            left: 0 !important;
+            right: 0 !important;
+        }
+
         .search-inp {
             width: 100%;
             font-size: 0.85rem;
@@ -106,10 +128,8 @@
 
         .search-btn {
             display: none;
-            /* hide search button in mobile */
         }
 
-        /* Center search bar between logo & hamburger */
         .mobile-search {
             flex: 1;
             max-width: 60%;
@@ -142,7 +162,7 @@
         <!-- Right Side -->
         <div class="d-flex align-items-center gap-2">
             <!-- Desktop: Search Bar (centered) -->
-            <form class="d-none d-md-flex my-2 my-md-0 mx-auto" role="search" action="/listings" method="GET">
+            <form class="d-none d-md-flex my-2 my-md-0" role="search" action="/listings" method="GET">
                 <input class="form-control me-2 search-inp" type="search" placeholder="Search by location or country"
                     name="location" />
                 <button class="btn search-btn" type="submit">
