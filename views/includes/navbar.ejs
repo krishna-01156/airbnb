@@ -31,12 +31,13 @@
         box-shadow: none;
     }
 
+    /* Dropdown style */
     .dropdown-menu-custom {
-        border-radius: 16px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
         border: none;
         padding: 0.5rem 0;
         min-width: 200px;
+        animation: slideDown 0.3s ease;
     }
 
     .dropdown-item-custom {
@@ -83,15 +84,37 @@
         display: none !important;
     }
 
+    /* Slide down animation */
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Small screens */
     @media (max-width: 576px) {
         .search-inp {
-            width: 150px;
+            width: 100%;
             font-size: 0.85rem;
         }
 
         .search-btn {
-            padding: 0.3rem 0.8rem;
-            font-size: 0.85rem;
+            display: none;
+            /* hide search button in mobile */
+        }
+
+        /* Center search bar between logo & hamburger */
+        .mobile-search {
+            flex: 1;
+            max-width: 60%;
+            display: flex;
+            justify-content: center;
         }
 
         .dropdown-menu-custom {
@@ -100,36 +123,10 @@
             left: 0 !important;
             right: 0 !important;
         }
-    }
 
-    /* Tablets */
-    @media (max-width: 768px) {
-        .profile-circle {
-            width: 30px;
-            height: 30px;
-            font-size: 14px;
-        }
-
-        .hamburger-circle {
-            width: 30px;
-            height: 30px;
-            font-size: 14px;
-        }
-    }
-
-    @media (max-width: 400px) {
-        .d-flex.my-2 {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .search-inp {
-            width: 100%;
-            margin-bottom: 0.5rem;
-        }
-
-        .search-btn {
-            width: 100%;
+        /* Hide Explore link only on mobile */
+        .nav-link.d-md-none {
+            display: none !important;
         }
     }
 </style>
@@ -139,11 +136,13 @@
         <!-- Left: Logo -->
         <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
 
-        <!-- Mobile: Search bar in middle -->
-        <form class="d-md-none flex-grow-1 px-3" role="search" action="/listings" method="GET">
-            <input class="form-control search-inp" type="search" placeholder="Search by location or country"
-                name="location" />
-        </form>
+        <!-- Mobile: Search bar centered -->
+        <div class="mobile-search d-md-none">
+            <form class="w-100" role="search" action="/listings" method="GET">
+                <input class="form-control search-inp text-center" type="search"
+                    placeholder="Search by location or country" name="location" />
+            </form>
+        </div>
 
         <!-- Hamburger Button -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
@@ -152,13 +151,8 @@
 
         <!-- Desktop Nav -->
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-
-            <div class="navbar-nav me-auto">
-                <a class="nav-link" href="/listings">Explore</a>
-            </div>
-
             <!-- Desktop: Search Bar -->
-            <form class="d-none d-md-flex my-2 my-md-0" role="search" action="/listings" method="GET">
+            <form class="d-none d-md-flex my-2 my-md-0 mx-auto" role="search" action="/listings" method="GET">
                 <input class="form-control me-2 search-inp" type="search" placeholder="Search by location or country"
                     name="location" />
                 <button class="btn search-btn" type="submit">
@@ -171,6 +165,7 @@
                 <!-- Desktop only -->
                 <a class="nav-link d-none d-md-block" href="/listings/new">Airbnb your home</a>
 
+                <!-- Hamburger dropdown -->
                 <div class="dropdown">
                     <button class="btn d-flex align-items-center justify-content-between gap-2 p-2 dropdown-toggle"
                         type="button" data-bs-toggle="dropdown" aria-expanded="false"
@@ -186,9 +181,8 @@
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-                        <!-- Common items (mobile-only items included here) -->
-                        <li><a class="dropdown-item dropdown-item-custom d-md-none" href="/listings/new">Airbnb your
-                                home</a></li>
+                        <!-- Airbnb home always in dropdown on mobile -->
+                        <li><a class="dropdown-item dropdown-item-custom" href="/listings/new">Airbnb your home</a></li>
 
                         <% if (!currentUser) { %>
                             <li><a class="dropdown-item dropdown-item-custom" href="/login">Log in</a></li>
