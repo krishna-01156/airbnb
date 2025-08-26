@@ -1,4 +1,4 @@
-<style>
+<style> 
     .search-btn {
         color: #fff;
         background-color: #ff385c;
@@ -137,72 +137,62 @@
 </style>
 
 <nav class="navbar navbar-expand-md navbar-light bg-body-light border-bottom sticky-top">
-  <div class="container-fluid">
-    <!-- Brand -->
-    <a class="navbar-brand" href="/listings">
-      <i class="fa-regular fa-compass"></i>
-    </a>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
 
-    <!-- Hamburger (Bootstrap) -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Collapsible Content -->
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-
-      <!-- Left Links -->
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/listings">Explore</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/listings/new">Airbnb your home</a>
-        </li>
-      </ul>
-
-      <!-- Search (will stack on mobile) -->
-      <form class="d-flex my-2 my-md-0 mx-md-auto" role="search" action="/listings" method="GET">
-        <input class="form-control me-2 search-inp" type="search" placeholder="Search by location or country"
-          name="location" />
-        <button class="btn search-btn" type="submit">
-          <i class="fa-solid fa-magnifying-glass"></i> Search
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+            <span class="navbar-toggler-icon"></span>
         </button>
-      </form>
 
-      <!-- Profile Dropdown -->
-      <ul class="navbar-nav ms-auto align-items-center">
-        <li class="nav-item dropdown">
-          <button class="btn d-flex align-items-center gap-2 p-2 dropdown-toggle" type="button"
-            data-bs-toggle="dropdown" aria-expanded="false" style="border:none;background:transparent;">
-            <% if (currentUser) { %>
-              <div class="profile-circle">
-                <%= currentUser.username.charAt(0).toUpperCase() %>
-              </div>
-            <% } else { %>
-              <div class="profile-circle">
-                <i class="fa-regular fa-user"></i>
-              </div>
-            <% } %>
-          </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-            <% if (!currentUser) { %>
-              <li><a class="dropdown-item dropdown-item-custom" href="/login">Log in</a></li>
-              <li><a class="dropdown-item dropdown-item-custom" href="/signup">Sign up</a></li>
-            <% } else { %>
-              <li><a class="dropdown-item dropdown-item-custom" href="/wishlist"><i class="fa-regular fa-heart"></i> Wishlists</a></li>
-              <li>
-                <form action="/logout" method="POST">
-                  <button type="submit" class="dropdown-item dropdown-item-custom w-100 text-start">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
-                  </button>
-                </form>
-              </li>
-            <% } %>
-          </ul>
-        </li>
-      </ul>
+            <div class="navbar-nav me-auto">
+                <a class="nav-link" href="/listings">Explore</a>
+            </div>
+            <form class="d-flex my-2 my-md-0" role="search" action="/listings" method="GET">
+                <input class="form-control me-2 search-inp" type="search" placeholder="Search by location or country"
+                    name="location" />
+                <button class="btn search-btn" type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>Search
+                </button>
+            </form>
+
+            <div class="navbar-nav ms-auto align-items-center gap-2">
+                <a class="nav-link" href="/listings/new">Airbnb your home</a>
+
+                <div class="dropdown">
+                    <button class="btn d-flex align-items-center justify-content-between gap-2 p-2 dropdown-toggle"
+                        type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                        style="border: none; background: transparent;">
+                        <% if (currentUser) { %>
+                            <div class="profile-circle">
+                                <%= currentUser.username.charAt(0).toUpperCase() %>
+                            </div>
+                            <% } %>
+                                <div class="hamburger-circle d-flex align-items-center justify-content-center">
+                                    <i class="fa-solid fa-bars"></i>
+                                </div>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
+                        <% if (!currentUser) { %>
+                            <li><a class="dropdown-item dropdown-item-custom" href="/login">Log in</a></li>
+                            <li><a class="dropdown-item dropdown-item-custom" href="/signup">Sign up</a></li>
+                            <% } else { %>
+                                <li><a class="dropdown-item dropdown-item-custom" href="/wishlist"><i
+                                            class="fa-regular fa-heart"></i> Wishlists</a></li>
+                                <li>
+                                    <form action="/logout" method="POST" class="d-inline">
+                                        <button type="submit"
+                                            class="dropdown-item dropdown-item-custom w-100 text-start">
+                                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
+                                        </button>
+                                    </form>
+                                </li>
+                            <% } %>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </nav>
