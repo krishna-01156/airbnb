@@ -1,4 +1,4 @@
-<style> 
+<style>
     .search-btn {
         color: #fff;
         background-color: #ff385c;
@@ -83,7 +83,6 @@
         display: none !important;
     }
 
-
     @media (max-width: 576px) {
         .search-inp {
             width: 150px;
@@ -94,7 +93,6 @@
             padding: 0.3rem 0.8rem;
             font-size: 0.85rem;
         }
-
 
         .dropdown-menu-custom {
             width: 100vw;
@@ -138,18 +136,29 @@
 
 <nav class="navbar navbar-expand-md navbar-light bg-body-light border-bottom sticky-top">
     <div class="container-fluid">
+        <!-- Left: Logo -->
         <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
 
+        <!-- Mobile: Search bar in middle -->
+        <form class="d-md-none flex-grow-1 px-3" role="search" action="/listings" method="GET">
+            <input class="form-control search-inp" type="search" placeholder="Search by location or country"
+                name="location" />
+        </form>
+
+        <!-- Hamburger Button -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        <!-- Desktop Nav -->
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 
             <div class="navbar-nav me-auto">
                 <a class="nav-link" href="/listings">Explore</a>
             </div>
-            <form class="d-flex my-2 my-md-0" role="search" action="/listings" method="GET">
+
+            <!-- Desktop: Search Bar -->
+            <form class="d-none d-md-flex my-2 my-md-0" role="search" action="/listings" method="GET">
                 <input class="form-control me-2 search-inp" type="search" placeholder="Search by location or country"
                     name="location" />
                 <button class="btn search-btn" type="submit">
@@ -157,8 +166,10 @@
                 </button>
             </form>
 
+            <!-- Right Side -->
             <div class="navbar-nav ms-auto align-items-center gap-2">
-                <a class="nav-link" href="/listings/new">Airbnb your home</a>
+                <!-- Desktop only -->
+                <a class="nav-link d-none d-md-block" href="/listings/new">Airbnb your home</a>
 
                 <div class="dropdown">
                     <button class="btn d-flex align-items-center justify-content-between gap-2 p-2 dropdown-toggle"
@@ -175,12 +186,17 @@
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
+                        <!-- Common items (mobile-only items included here) -->
+                        <li><a class="dropdown-item dropdown-item-custom d-md-none" href="/listings/new">Airbnb your
+                                home</a></li>
+
                         <% if (!currentUser) { %>
                             <li><a class="dropdown-item dropdown-item-custom" href="/login">Log in</a></li>
                             <li><a class="dropdown-item dropdown-item-custom" href="/signup">Sign up</a></li>
                             <% } else { %>
-                                <li><a class="dropdown-item dropdown-item-custom" href="/wishlist"><i
-                                            class="fa-regular fa-heart"></i> Wishlists</a></li>
+                                <li><a class="dropdown-item dropdown-item-custom" href="/wishlist">
+                                        <i class="fa-regular fa-heart"></i> Wishlists</a>
+                                </li>
                                 <li>
                                     <form action="/logout" method="POST" class="d-inline">
                                         <button type="submit"
@@ -189,7 +205,7 @@
                                         </button>
                                     </form>
                                 </li>
-                            <% } %>
+                                <% } %>
                     </ul>
                 </div>
             </div>
