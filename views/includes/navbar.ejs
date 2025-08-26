@@ -123,16 +123,11 @@
             left: 0 !important;
             right: 0 !important;
         }
-
-        /* Hide Explore link only on mobile */
-        .nav-link.d-md-none {
-            display: none !important;
-        }
     }
 </style>
 
 <nav class="navbar navbar-expand-md navbar-light bg-body-light border-bottom sticky-top">
-    <div class="container-fluid">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
         <!-- Left: Logo -->
         <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
 
@@ -144,14 +139,9 @@
             </form>
         </div>
 
-        <!-- Hamburger Button -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Desktop Nav -->
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <!-- Desktop: Search Bar -->
+        <!-- Right Side -->
+        <div class="d-flex align-items-center gap-2">
+            <!-- Desktop: Search Bar (centered) -->
             <form class="d-none d-md-flex my-2 my-md-0 mx-auto" role="search" action="/listings" method="GET">
                 <input class="form-control me-2 search-inp" type="search" placeholder="Search by location or country"
                     name="location" />
@@ -160,48 +150,45 @@
                 </button>
             </form>
 
-            <!-- Right Side -->
-            <div class="navbar-nav ms-auto align-items-center gap-2">
-                <!-- Desktop only -->
-                <a class="nav-link d-none d-md-block" href="/listings/new">Airbnb your home</a>
+            <!-- Desktop only link -->
+            <a class="nav-link d-none d-md-block" href="/listings/new">Airbnb your home</a>
 
-                <!-- Hamburger dropdown -->
-                <div class="dropdown">
-                    <button class="btn d-flex align-items-center justify-content-between gap-2 p-2 dropdown-toggle"
-                        type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                        style="border: none; background: transparent;">
-                        <% if (currentUser) { %>
-                            <div class="profile-circle">
-                                <%= currentUser.username.charAt(0).toUpperCase() %>
+            <!-- Dropdown (hamburger, single for both views) -->
+            <div class="dropdown">
+                <button class="btn d-flex align-items-center justify-content-between gap-2 p-2 dropdown-toggle"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    style="border: none; background: transparent;">
+                    <% if (currentUser) { %>
+                        <div class="profile-circle">
+                            <%= currentUser.username.charAt(0).toUpperCase() %>
+                        </div>
+                        <% } %>
+                            <div class="hamburger-circle d-flex align-items-center justify-content-center">
+                                <i class="fa-solid fa-bars"></i>
                             </div>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
+                    <!-- Airbnb home always inside dropdown on mobile -->
+                    <li class="d-md-none"><a class="dropdown-item dropdown-item-custom" href="/listings/new">Airbnb your
+                            home</a></li>
+
+                    <% if (!currentUser) { %>
+                        <li><a class="dropdown-item dropdown-item-custom" href="/login">Log in</a></li>
+                        <li><a class="dropdown-item dropdown-item-custom" href="/signup">Sign up</a></li>
+                        <% } else { %>
+                            <li><a class="dropdown-item dropdown-item-custom" href="/wishlist">
+                                    <i class="fa-regular fa-heart"></i> Wishlists</a>
+                            </li>
+                            <li>
+                                <form action="/logout" method="POST" class="d-inline">
+                                    <button type="submit" class="dropdown-item dropdown-item-custom w-100 text-start">
+                                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
+                                    </button>
+                                </form>
+                            </li>
                             <% } %>
-                                <div class="hamburger-circle d-flex align-items-center justify-content-center">
-                                    <i class="fa-solid fa-bars"></i>
-                                </div>
-                    </button>
-
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-                        <!-- Airbnb home always in dropdown on mobile -->
-                        <li><a class="dropdown-item dropdown-item-custom" href="/listings/new">Airbnb your home</a></li>
-
-                        <% if (!currentUser) { %>
-                            <li><a class="dropdown-item dropdown-item-custom" href="/login">Log in</a></li>
-                            <li><a class="dropdown-item dropdown-item-custom" href="/signup">Sign up</a></li>
-                            <% } else { %>
-                                <li><a class="dropdown-item dropdown-item-custom" href="/wishlist">
-                                        <i class="fa-regular fa-heart"></i> Wishlists</a>
-                                </li>
-                                <li>
-                                    <form action="/logout" method="POST" class="d-inline">
-                                        <button type="submit"
-                                            class="dropdown-item dropdown-item-custom w-100 text-start">
-                                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
-                                        </button>
-                                    </form>
-                                </li>
-                                <% } %>
-                    </ul>
-                </div>
+                </ul>
             </div>
         </div>
     </div>
