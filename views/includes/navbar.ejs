@@ -88,7 +88,6 @@
         display: none !important;
     }
 
-
     @keyframes slideDown {
         from {
             opacity: 0;
@@ -102,6 +101,8 @@
     }
 
     @media (min-width: 768px) {
+
+        /* Center search bar in desktop */
         .navbar-collapse form {
             margin-left: auto;
             margin-right: auto;
@@ -115,7 +116,6 @@
 
         .dropdown-menu-custom {
             width: 100%;
-            max-width: 100vw;
             border-radius: 0;
             left: 0 !important;
             right: 0 !important;
@@ -135,13 +135,6 @@
             max-width: 60%;
             display: flex;
             justify-content: center;
-        }
-
-        .dropdown-menu-custom {
-            width: 100vw;
-            border-radius: 0;
-            left: 0 !important;
-            right: 0 !important;
         }
     }
 </style>
@@ -173,7 +166,7 @@
             <!-- Desktop only link -->
             <a class="nav-link d-none d-md-block" href="/listings/new">Airbnb your home</a>
 
-            <!-- Dropdown (hamburger, single for both views) -->
+            <!-- Dropdown (only one hamburger, works for both views) -->
             <div class="dropdown">
                 <button class="btn d-flex align-items-center justify-content-between gap-2 p-2 dropdown-toggle"
                     type="button" data-bs-toggle="dropdown" aria-expanded="false"
@@ -188,18 +181,19 @@
                             </div>
                 </button>
 
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-                    <!-- Airbnb home always inside dropdown on mobile -->
-                    <li class="d-md-none"><a class="dropdown-item dropdown-item-custom" href="/listings/new">Airbnb your
-                            home</a></li>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom w-100">
+                    <!-- Airbnb your home only on mobile -->
+                    <li class="d-md-none">
+                        <a class="dropdown-item dropdown-item-custom" href="/listings/new">Airbnb your home</a>
+                    </li>
 
                     <% if (!currentUser) { %>
                         <li><a class="dropdown-item dropdown-item-custom" href="/login">Log in</a></li>
                         <li><a class="dropdown-item dropdown-item-custom" href="/signup">Sign up</a></li>
                         <% } else { %>
                             <li><a class="dropdown-item dropdown-item-custom" href="/wishlist">
-                                    <i class="fa-regular fa-heart"></i> Wishlists</a>
-                            </li>
+                                    <i class="fa-regular fa-heart"></i> Wishlists
+                                </a></li>
                             <li>
                                 <form action="/logout" method="POST" class="d-inline">
                                     <button type="submit" class="dropdown-item dropdown-item-custom w-100 text-start">
