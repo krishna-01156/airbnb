@@ -100,25 +100,27 @@
         }
     }
 
+    /* Desktop: Center search bar */
     @media (min-width: 768px) {
-
-        /* Center search bar in desktop */
-        .navbar-collapse form {
-            margin-left: auto;
-            margin-right: auto;
+        .desktop-search {
+            flex: 1;
+            display: flex;
+            justify-content: center;
         }
     }
 
+    /* Mobile view fixes */
     @media (max-width: 576px) {
         body {
             overflow-x: hidden;
         }
 
         .dropdown-menu-custom {
-            width: 100%;
-            border-radius: 0;
-            left: 0 !important;
-            right: 0 !important;
+            width: 95vw;
+            /* stays inside screen */
+            left: 50% !important;
+            transform: translateX(-50%);
+            border-radius: 12px;
         }
 
         .search-inp {
@@ -132,7 +134,8 @@
 
         .mobile-search {
             flex: 1;
-            max-width: 60%;
+            max-width: 90%;
+            /* more breathing space */
             display: flex;
             justify-content: center;
         }
@@ -155,18 +158,20 @@
         <!-- Right Side -->
         <div class="d-flex align-items-center gap-2">
             <!-- Desktop: Search Bar (centered) -->
-            <form class="d-none d-md-flex my-2 my-md-0" role="search" action="/listings" method="GET">
-                <input class="form-control me-2 search-inp" type="search" placeholder="Search by location or country"
-                    name="location" />
-                <button class="btn search-btn" type="submit">
-                    <i class="fa-solid fa-magnifying-glass"></i>Search
-                </button>
-            </form>
+            <div class="desktop-search d-none d-md-flex">
+                <form class="d-flex my-2 my-md-0" role="search" action="/listings" method="GET">
+                    <input class="form-control me-2 search-inp" type="search"
+                        placeholder="Search by location or country" name="location" />
+                    <button class="btn search-btn" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>Search
+                    </button>
+                </form>
+            </div>
 
             <!-- Desktop only link -->
             <a class="nav-link d-none d-md-block" href="/listings/new">Airbnb your home</a>
 
-            <!-- Dropdown (only one hamburger, works for both views) -->
+            <!-- Dropdown (works for both views) -->
             <div class="dropdown">
                 <button class="btn d-flex align-items-center justify-content-between gap-2 p-2 dropdown-toggle"
                     type="button" data-bs-toggle="dropdown" aria-expanded="false"
@@ -181,7 +186,7 @@
                             </div>
                 </button>
 
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom w-100">
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
                     <!-- Airbnb your home only on mobile -->
                     <li class="d-md-none">
                         <a class="dropdown-item dropdown-item-custom" href="/listings/new">Airbnb your home</a>
